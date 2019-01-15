@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MapShare</string>
     <string name="button">Button</string>
+    <string name="mapshare">MapShare</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="log_in">Log In</string>
 </resources>
