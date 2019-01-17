@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (task.isSuccessful()) {
                     Intent intentMain = new Intent();
-                    intentMain.setClass(LoginActivity.this, MainActivity.class);
+                    intentMain.setClass(LoginActivity.this, MapsActivity.class);
                     Log.d("TAG_UI", "HERE");
                     startActivity(intentMain);
                 } else {
