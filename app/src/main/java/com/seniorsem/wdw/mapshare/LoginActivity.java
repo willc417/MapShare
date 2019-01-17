@@ -20,6 +20,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.FirebaseDatabase;
+import com.seniorsem.wdw.mapshare.data.User;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -99,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         hideProgressDialog();
 
+
                         if (task.isSuccessful()) {
                             FirebaseUser fbUser = task.getResult().getUser();
 
@@ -106,6 +109,18 @@ public class LoginActivity extends AppCompatActivity {
                                     setDisplayName(usernameFromEmail(fbUser.getEmail())).build());
 
                             Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
+
+                            String key = FirebaseDatabase.getInstance().getReference().child("User").push().getKey();
+
+                            User newUser = new User(
+                                    fbUser.getEmail(), null, null, null);
+
+                            FirebaseDatabase.getInstance().getReference().child("User").child(key).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    //could move to Map from here. 
+                                }
+                            });
 
                         } else {
                             Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
