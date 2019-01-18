@@ -36,6 +36,8 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     implementation 'com.google.android.gms:play-services-maps:11.6.0'
 
+    implementation 'com.google.android.gms:play-services-location:11.6.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
