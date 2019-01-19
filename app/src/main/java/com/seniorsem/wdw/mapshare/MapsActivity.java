@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -17,7 +18,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.seniorsem.wdw.mapshare.data.Map;
+import com.seniorsem.wdw.mapshare.data.MyMarker;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -57,7 +69,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+   /*     if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             return;
         }
@@ -70,7 +82,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         LatLng player = new LatLng(longitude, latitude); //Origninally -35 and 151
         mMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(player));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(player)); */
+
+       // AddMarkers(mMap);
     }
 
+    private void AddMarkers(final GoogleMap mMap) {
+        //Log.d("TAG_UI", "User/" + FirebaseAuth.getInstance().getCurrentUser() + "/createdMaps");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("User/" + FirebaseAuth.getInstance().getUid() + "/createdMaps");
+
+
+        ref.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map createdMap = dataSnapshot.getValue(Map.class);
+                Log.d("TAG_UI", "onChildAdded");
+                List<MyMarker> newMarkers = createdMap.getMyMarkers();
+
+                for (int i = 0; i < newMarkers.size(); i++) {
+                    LatLng loc = new LatLng(newMarkers.get(i).getLat(), newMarkers.get(i).getLon());
+                    Marker newMarker = mMap.addMarker(new MarkerOptions().position(loc).title("Test"));
+                }
+
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // mapReset();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

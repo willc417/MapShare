@@ -5,15 +5,15 @@ import java.util.List;
 public class Map {
 
     private String CreaterUID;
-    private List<Marker>Markers;
+    private List<MyMarker>MyMarkers;
     private String Date;
     private int NumSubs;
     private int Privacy;
 
-    public Map(String createrUID, List<Marker> markers, String date, int numSubs, int privacy) {
+    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy) {
 
         CreaterUID = createrUID;
-        Markers = markers;
+        MyMarkers = markers;
         Date = date;
         NumSubs = numSubs;
         Privacy = privacy;
@@ -27,12 +27,12 @@ public class Map {
         CreaterUID = createrUID;
     }
 
-    public List<Marker> getMarkers() {
-        return Markers;
+    public List<MyMarker> getMyMarkers() {
+        return MyMarkers;
     }
 
-    public void setMarkers(List<Marker> markers) {
-        Markers = markers;
+    public void setMyMarkers(List<MyMarker> markers) {
+        MyMarkers = markers;
     }
 
     public String getDate() {
