@@ -8,6 +8,8 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +31,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        Button navigationButton = findViewById(R.id.btn_navigation);
+        final Button profileButton = findViewById(R.id.btn_go_to_profile);
+        navigationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileButton.setVisibility(View.VISIBLE);
+
+            }
+        });
     }
 
 
@@ -60,4 +72,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(player));
     }
+
 }
