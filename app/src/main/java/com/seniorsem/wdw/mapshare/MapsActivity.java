@@ -17,6 +17,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -26,8 +28,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
+import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.List;
 
@@ -67,8 +71,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
+        //LatLng sydney = new LatLng(-33.852, 151.211);
+        //googleMap.addMarker(new MarkerOptions().position(sydney)
+         //       .title("Marker in Sydney"));
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
    /*     if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             return;
@@ -84,27 +91,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(player)); */
 
-       // AddMarkers(mMap);
+       AddMarkers(googleMap);
+
+
+
+
     }
 
-    private void AddMarkers(final GoogleMap mMap) {
-        //Log.d("TAG_UI", "User/" + FirebaseAuth.getInstance().getCurrentUser() + "/createdMaps");
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("User/" + FirebaseAuth.getInstance().getUid() + "/createdMaps");
-
-
-        ref.addChildEventListener(new ChildEventListener() {
+    private void AddMarkers(final GoogleMap googleMap) {
+        final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("User");
+        dbRef.orderByChild("uid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Map createdMap = dataSnapshot.getValue(Map.class);
-                Log.d("TAG_UI", "onChildAdded");
-                List<MyMarker> newMarkers = createdMap.getMyMarkers();
-
-                for (int i = 0; i < newMarkers.size(); i++) {
-                    LatLng loc = new LatLng(newMarkers.get(i).getLat(), newMarkers.get(i).getLon());
-                    Marker newMarker = mMap.addMarker(new MarkerOptions().position(loc).title("Test"));
+                User currUser = dataSnapshot.getValue(User.class);
+                List<Map> createdMaps = currUser.getCreatedMaps();
+                for (int i = 0; i < createdMaps.size(); i++) {
+                    List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
+                    for (int j = 0; j < myMarkers.size(); j++) {
+                        Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+                    }
                 }
-
-
             }
 
             @Override
@@ -114,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // mapReset();
+
             }
 
             @Override
@@ -127,5 +133,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+
+
     }
+
 }

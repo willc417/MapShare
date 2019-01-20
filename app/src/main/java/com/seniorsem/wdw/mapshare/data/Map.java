@@ -10,13 +10,15 @@ public class Map {
     private int NumSubs;
     private int Privacy;
 
+    public Map() {}
+
     public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy) {
 
-        CreaterUID = createrUID;
-        MyMarkers = markers;
-        Date = date;
-        NumSubs = numSubs;
-        Privacy = privacy;
+        this.CreaterUID = createrUID;
+        this.MyMarkers = markers;
+        this.Date = date;
+        this.NumSubs = numSubs;
+        this.Privacy = privacy;
     }
 
     public String getCreaterUID() {
