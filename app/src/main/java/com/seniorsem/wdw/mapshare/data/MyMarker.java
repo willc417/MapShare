@@ -1,6 +1,6 @@
 package com.seniorsem.wdw.mapshare.data;
 
-public class Marker {
+public class MyMarker {
 
     private Double Lat;
     private Double Lon;
@@ -11,9 +11,9 @@ public class Marker {
     private String IconType;
     private Boolean isVisited;
 
-    public Marker() {}
+    public MyMarker() {}
 
-    public Marker(Double Lat, Double Lon, String Title, String Description, String ImageURL, String VideoURL, String IconType, Boolean isVisited){
+    public MyMarker(Double Lat, Double Lon, String Title, String Description, String ImageURL, String VideoURL, String IconType, Boolean isVisited){
         this.Lat = Lat;
         this.Lon = Lon;
         this.Title = Title;

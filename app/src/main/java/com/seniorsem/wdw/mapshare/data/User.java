@@ -9,6 +9,8 @@ public class User {
     private List<Map> subMaps;
     private List<User> Friends;
 
+    public User() {}
+
     public User(String UID, List<Map> createdMaps, List<Map> subMaps, List<User> friends) {
 
         this.UID = UID;
