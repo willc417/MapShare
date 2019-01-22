@@ -1,13 +1,18 @@
 package com.seniorsem.wdw.mapshare;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -35,9 +40,12 @@ import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.List;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private GoogleMap mMap;
+    private LocationManager locationManager;
+    private float zoomLevel = 15.5f;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +55,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        requestNeededPermission();
         Button navigationButton = findViewById(R.id.btn_navigation);
         final Button profileButton = findViewById(R.id.btn_go_to_profile);
         navigationButton.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+
     }
 
 
@@ -76,21 +86,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //googleMap.addMarker(new MarkerOptions().position(sydney)
          //       .title("Marker in Sydney"));
         //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-   /*     if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             return;
         }
-
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
 
         // Add a marker in Sydney and move the camera
-        LatLng player = new LatLng(longitude, latitude); //Origninally -35 and 151
-        mMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(player)); */
-
+        LatLng player = new LatLng(latitude, longitude); //Origninally -35 and 151
+        googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
        AddMarkers(googleMap);
 
 
@@ -134,6 +142,69 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+
+    }
+
+    private void requestNeededPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Toast...
+            }
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    101);
+        } else {
+            startLocationMonitoring();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 101) {
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+
+                // start our job
+                startLocationMonitoring();
+            } else {
+                Toast.makeText(this, "Permission not granted :(", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void startLocationMonitoring() {
+        try {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        }catch (SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void stopLocationMonitoring() {
+        locationManager.removeUpdates(this);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //LastLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        //mMap.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
 
     }
 
