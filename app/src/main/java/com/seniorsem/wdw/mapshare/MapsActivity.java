@@ -2,6 +2,7 @@ package com.seniorsem.wdw.mapshare;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -53,7 +54,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         navigationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileButton.setVisibility(View.VISIBLE);
+                //profileButton.setVisibility(View.VISIBLE);
+                Intent intentMain = new Intent();
+                intentMain.setClass(MapsActivity.this, ViewMapsActivity.class);
+                Log.d("TAG_UI", "HERE");
+                startActivity(intentMain);
 
             }
         });

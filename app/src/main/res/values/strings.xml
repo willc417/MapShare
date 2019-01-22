@@ -7,4 +7,7 @@
     <string name="register">Register</string>
     <string name="log_in">Log In</string>
     <string name="title_activity_maps">Map</string>
+    <string name="creator">Creator</string>
+    <string name="title">Title</string>
+    <string name="date">date</string>
 </resources>

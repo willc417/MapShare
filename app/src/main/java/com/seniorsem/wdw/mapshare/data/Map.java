@@ -9,16 +9,37 @@ public class Map {
     private String Date;
     private int NumSubs;
     private int Privacy;
+    private String Title;
+    private String Description;
 
     public Map() {}
 
-    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy) {
+    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description) {
 
         this.CreaterUID = createrUID;
         this.MyMarkers = markers;
         this.Date = date;
         this.NumSubs = numSubs;
         this.Privacy = privacy;
+        this.Title = title;
+        this.Description = description;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
+
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        this.Title = title;
     }
 
     public String getCreaterUID() {
