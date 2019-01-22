@@ -1,5 +1,8 @@
 package com.seniorsem.wdw.mapshare.data;
 
+import android.location.LocationListener;
+import android.location.LocationManager;
+
 import java.util.List;
 
 public class Map {
