@@ -25,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
-        android:hint="@string/username"/>
+        android:hint="@string/username"
+        android:text="password3@gmail.com"/>
 
     <EditText
         android:id="@+id/password_edit"
@@ -33,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
         android:inputType="textPassword"
-        android:hint="@string/password"/>
+        android:hint="@string/password"
+        android:text="password3"/>
 
     <LinearLayout
         android:layout_marginTop="50dp"

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.seniorsem.wdw.mapshare.R;
 import com.seniorsem.wdw.mapshare.data.Map;
 
@@ -100,6 +101,31 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }
+    }
+
+    public void removeMap(int index) {
+        FirebaseDatabase.getInstance().getReference("posts").child(
+                mapKeys.get(index)).removeValue();
+        mapList.remove(index);
+        mapKeys.remove(index);
+        notifyItemRemoved(index);
+    }
+
+    public void removeMapByKey(String key) {
+        int index = mapKeys.indexOf(key);
+        if (index != -1) {
+            mapList.remove(index);
+            mapKeys.remove(index);
+            notifyItemRemoved(index);
+        }
+    }
+
+    public void removeAll() {
+        for (int i = 0; i < mapKeys.size(); i++) {
+            removeMapByKey(mapKeys.get(i));
+        }
+
+
     }
 
     @Override
