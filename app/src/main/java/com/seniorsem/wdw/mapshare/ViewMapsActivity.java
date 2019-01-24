@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -23,9 +25,17 @@ import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ViewMapsActivity extends AppCompatActivity {
 
     private ViewMapsRecyclerAdapter viewMapsRecyclerAdapter;
+
+    @BindView(R.id.switchBtn)
+    Button btnSwitch;
+    public boolean viewingCreated = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +53,22 @@ public class ViewMapsActivity extends AppCompatActivity {
         layoutManager.setStackFromEnd(true);
         recyclerViewPlaces.setLayoutManager(layoutManager);
         recyclerViewPlaces.setAdapter(viewMapsRecyclerAdapter);
+        ButterKnife.bind(this);
 
         initPosts();
     }
 
+    @OnClick(R.id.switchBtn)
+    void switchMaps() {
+        if (viewingCreated) {
+            viewingCreated = false;
+            btnSwitch.setText("Saved Maps"); }
+        else {
+            viewingCreated = true;
+            btnSwitch.setText("Created Maps"); }
+            viewMapsRecyclerAdapter.removeAll();
+            initPosts();
+    }
 
     private void initPosts() {
 
@@ -55,9 +77,15 @@ public class ViewMapsActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User currUser = dataSnapshot.getValue(User.class);
-                List<Map> createdMaps = currUser.getCreatedMaps();
-                for (int i = 0; i < createdMaps.size(); i++) {
-                    viewMapsRecyclerAdapter.addMap(createdMaps.get(i), dataSnapshot.getKey());
+                List<Map> Maps;
+                if (viewingCreated) {
+                Maps = currUser.getCreatedMaps(); }
+                else
+                {
+                    Maps = currUser.getSubMaps();
+                }
+                for (int i = 0; i < Maps.size(); i++) {
+                    viewMapsRecyclerAdapter.addMap(Maps.get(i), dataSnapshot.getKey());
                 }
             }
             @Override
@@ -66,11 +94,11 @@ public class ViewMapsActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-              /*  viewMapsRecyclerAdapter.removeMapByKey(dataSnapshot.getKey());
+              viewMapsRecyclerAdapter.removeMapByKey(dataSnapshot.getKey());
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", 1);
                 setResult(Activity.RESULT_OK, returnIntent);
-                finish();*/
+                finish();
             }
 
             @Override

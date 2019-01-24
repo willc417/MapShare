@@ -43,7 +43,6 @@ import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
-    private GoogleMap mMap;
     private LocationManager locationManager;
     private float zoomLevel = 15.5f;
 
@@ -117,14 +116,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User currUser = dataSnapshot.getValue(User.class);
-                List<Map> createdMaps = currUser.getCreatedMaps();
+                List<Map> createdMaps = currUser.getCreatedMaps(); //need to adjust this to subMaps?
+                if (createdMaps != null) {
                 for (int i = 0; i < createdMaps.size(); i++) {
                     List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
                     for (int j = 0; j < myMarkers.size(); j++) {
                         Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
                     }
                 }
-            }
+            } }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
