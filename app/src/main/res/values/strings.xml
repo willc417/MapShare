@@ -10,5 +10,6 @@
     <string name="creator">Creator</string>
     <string name="title">Title</string>
     <string name="date">date</string>
-
+    <string name="title_create_map">Create New Map</string>
+    <string name="enter_title">Enter Map Title</string>
 </resources>
