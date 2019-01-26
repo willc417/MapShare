@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -58,39 +59,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         requestNeededPermission();
-        Button navigationButton = findViewById(R.id.btn_navigation);
-        final Button profileButton = findViewById(R.id.btn_go_to_profile);
-        navigationButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //profileButton.setVisibility(View.VISIBLE);
-                Intent intentMain = new Intent();
-                intentMain.setClass(MapsActivity.this, ViewMapsActivity.class);
-                Log.d("TAG_UI", "HERE");
-                startActivity(intentMain);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                Toast.makeText(MapsActivity.this, "TESTING", Toast.LENGTH_LONG).show();
             }
         });
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        //LatLng sydney = new LatLng(-33.852, 151.211);
-        //googleMap.addMarker(new MarkerOptions().position(sydney)
-         //       .title("Marker in Sydney"));
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
             return;
@@ -99,8 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double longitude = location.getLongitude();
         double latitude = location.getLatitude();
 
-        // Add a marker in Sydney and move the camera
-        LatLng player = new LatLng(latitude, longitude); //Origninally -35 and 151
+        LatLng player = new LatLng(latitude, longitude);
         googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
