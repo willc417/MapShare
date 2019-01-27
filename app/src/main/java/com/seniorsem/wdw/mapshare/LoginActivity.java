@@ -21,7 +21,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.FirebaseDatabase;
+import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,9 +115,12 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
 
                             String key = FirebaseDatabase.getInstance().getReference().child("User").push().getKey();
+                            List<Map> createdMaps = new ArrayList<>();
+                            List<Map> subMaps = new ArrayList<>();
+                            List<User> friends = new ArrayList<>();
 
                             User newUser = new User(
-                                    fbUser.getEmail(), null, null, null);
+                                    fbUser.getEmail(), createdMaps, subMaps, friends);
 
                             FirebaseDatabase.getInstance().getReference().child("User").child(key).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

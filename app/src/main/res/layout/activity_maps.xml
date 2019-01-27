@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".MapsActivity">
+
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -11,22 +16,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MapsActivity">
-
     </fragment>
-    <Button style="@style/Widget.AppCompat.Button.Colored"
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme = "@style/AppTheme">
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_main" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_button"
-        android:layout_gravity="right|bottom"
-        android:text="Press me"
-        android:layout_margin="20dp"
-        android:id="@+id/btn_navigation"
-        />
-    <Button style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:visibility="gone"
-        android:id="@+id/btn_go_to_profile"
-        />
-</FrameLayout>
+        android:layout_gravity="bottom|start"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_dialog_email" />
+
+</android.support.design.widget.CoordinatorLayout>
+
