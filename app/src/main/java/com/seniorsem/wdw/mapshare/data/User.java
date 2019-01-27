@@ -51,4 +51,8 @@ public class User {
     public void setFriends(List<User> friends) {
         Friends = friends;
     }
+
+    public void addMap(Map mapToAdd){
+        this.createdMaps.add(mapToAdd);
+    }
 }
