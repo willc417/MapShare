@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
     }
+
     @OnClick(R.id.login_btn)
     void loginClick() {
         if (!isFormValid()) {
@@ -54,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         showProgressDialog();
-
 
 
         firebaseAuth.signInWithEmailAndPassword(
@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intentMain);
                 } else {
                     Toast.makeText(LoginActivity.this,
-                            "Error: "+task.getException().getMessage(),
+                            "Error: " + task.getException().getMessage(),
                             Toast.LENGTH_SHORT).show();
 
                 }

@@ -65,7 +65,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 //profileButton.setVisibility(View.VISIBLE);
                 Intent intentMain = new Intent();
-                intentMain.setClass(MapsActivity.this, ViewMapsActivity.class);
+                intentMain.setClass(MapsActivity.this, CreateMapActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
 
@@ -89,10 +89,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //LatLng sydney = new LatLng(-33.852, 151.211);
         //googleMap.addMarker(new MarkerOptions().position(sydney)
-         //       .title("Marker in Sydney"));
+        //       .title("Marker in Sydney"));
         //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -104,9 +104,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
-       AddMarkers(googleMap);
-
-
+        AddMarkers(googleMap);
 
 
     }
@@ -117,11 +115,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User currUser = dataSnapshot.getValue(User.class);
-                List<Map> createdMaps = currUser.getCreatedMaps();
-                for (int i = 0; i < createdMaps.size(); i++) {
-                    List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
-                    for (int j = 0; j < myMarkers.size(); j++) {
-                        Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+                if (currUser.getCreatedMaps() != null) {
+                    List<Map> createdMaps = currUser.getCreatedMaps();
+                    for (int i = 0; i < createdMaps.size(); i++) {
+                        List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
+                        if (myMarkers != null) {
+                            for (int j = 0; j < myMarkers.size(); j++) {
+                                Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+                            }
+                        }
                     }
                 }
             }
@@ -182,7 +184,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void startLocationMonitoring() {
         try {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        }catch (SecurityException e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }

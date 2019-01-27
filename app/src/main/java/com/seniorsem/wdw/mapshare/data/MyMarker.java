@@ -17,7 +17,7 @@ public class MyMarker {
         this.Lat = Lat;
         this.Lon = Lon;
         this.Title = Title;
-        this.Title = Description;
+        this.Description = Description;
         this.ImageURL = ImageURL;
         this.VideoURL = VideoURL;
         this.IconType = IconType;
