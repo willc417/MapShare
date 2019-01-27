@@ -4,44 +4,37 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.seniorsem.wdw.mapshare.R;
-import com.seniorsem.wdw.mapshare.data.Map;
+import com.seniorsem.wdw.mapshare.data.MyMarker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecyclerAdapter.ViewHolder> {
+public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkersRecyclerAdapter.ViewHolder> {
 
     private Context context;
-    private List<Map> mapList;
-    private List<String> mapKeys;
-    private String creatorUID;
+    private List<MyMarker> myMarkerList;
+    private List<String> myMarkerKeys;
     private int lastPosition = -1;
 
-    public ViewMapsRecyclerAdapter(Context context, String creatorUID) {
+    public ViewMarkersRecyclerAdapter(Context context, String creatorUID) {
         this.context = context;
-        this.creatorUID = creatorUID;
-        this.mapList = new ArrayList<Map>();
-        this.mapKeys = new ArrayList<String>();
+        this.myMarkerList = new ArrayList<MyMarker>();
+        this.myMarkerKeys = new ArrayList<String>();
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         {
             View v = LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.row_map, viewGroup, false);
+                    .inflate(R.layout.marker_card, viewGroup, false);
 
             return new ViewHolder(v);
         }
@@ -51,14 +44,14 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.tvCreator.setText(context.getString(R.string.creator,
-                mapList.get(holder.getAdapterPosition()).getCreaterUID()));
         holder.tvTitle.setText(context.getString(R.string.title,
-                mapList.get(holder.getAdapterPosition()).getTitle()));
+                myMarkerList.get(holder.getAdapterPosition()).getTitle()));
         holder.tvDescription.setText(
-                mapList.get(holder.getAdapterPosition()).getDescription());
-        holder.date.setText(context.getString(R.string.date,
-                mapList.get(holder.getAdapterPosition()).getDate()));
+                myMarkerList.get(holder.getAdapterPosition()).getDescription());
+        holder.tvLon.setText(String.valueOf(
+                myMarkerList.get(holder.getAdapterPosition()).getLat()));
+        holder.tvLat.setText(String.valueOf(
+                myMarkerList.get(holder.getAdapterPosition()).getLon()));
 
         setAnimation(holder.itemView, position);
 
@@ -101,55 +94,35 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         }
     }
 
-    public void removeMap(int index) {
-        FirebaseDatabase.getInstance().getReference("posts").child(
-                mapKeys.get(index)).removeValue();
-        mapList.remove(index);
-        mapKeys.remove(index);
-        notifyItemRemoved(index);
-    }
 
-    public void removeMapByKey(String key) {
-        int index = mapKeys.indexOf(key);
-        if (index != -1) {
-            mapList.remove(index);
-            mapKeys.remove(index);
-            notifyItemRemoved(index);
-        }
-    }
-
-    public void removeAll() {
-        for (int i = 0; i < mapKeys.size(); i++) {
-            removeMapByKey(mapKeys.get(i));
-        }
-
-
+    public List<MyMarker> getMyMarkerList() {
+        return myMarkerList;
     }
 
     @Override
     public int getItemCount() {
-        return mapList.size();
+        return myMarkerList.size();
     }
 
-    public void addMap(Map newMap, String key) {
-        mapList.add(newMap);
-        mapKeys.add(key);
+    public void addMarker(MyMarker newMarker, String key) {
+        myMarkerList.add(newMarker);
+        myMarkerKeys.add(key);
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvCreator;
         public TextView tvTitle;
         public TextView tvDescription;
-        public TextView date;
+        public TextView tvLon;
+        public TextView tvLat;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvCreator = itemView.findViewById(R.id.tvCreator);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
-            date = itemView.findViewById(R.id.date);
+            tvLon = itemView.findViewById(R.id.tvLon);
+            tvLat = itemView.findViewById(R.id.tvLat);
         }
     }
 

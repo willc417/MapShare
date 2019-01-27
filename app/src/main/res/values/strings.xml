@@ -12,4 +12,6 @@
     <string name="date">date</string>
     <string name="title_create_map">Create New Map</string>
     <string name="enter_title">Enter Map Title</string>
+    <string name="create_map">Create Map</string>
+    <string name="write_description">Write Description</string>
 </resources>
