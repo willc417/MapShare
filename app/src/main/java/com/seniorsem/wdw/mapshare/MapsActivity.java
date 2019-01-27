@@ -68,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, CreateMapActivity.class);
                 Log.d("TAG_UI", "HERE");
-                startActivity(intentMain)
+                startActivity(intentMain);
             }
         });
 
@@ -113,7 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     }
                 }
-            } }
+            }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
