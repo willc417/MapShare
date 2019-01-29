@@ -56,16 +56,13 @@
             android:id="@+id/markerLon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Lon"
-            android:inputType="numberDecimal" />
+            android:hint="Lon" />
 
         <EditText
             android:id="@+id/markerLat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="marker Lat"
-
-            android:inputType="numberDecimal" />
+            android:hint="marker Lat"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerViewMarkers"
