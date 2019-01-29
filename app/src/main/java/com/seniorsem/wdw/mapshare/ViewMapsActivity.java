@@ -94,11 +94,11 @@ public class ViewMapsActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-              viewMapsRecyclerAdapter.removeMapByKey(dataSnapshot.getKey());
+              /*viewMapsRecyclerAdapter.removeMapByKey(dataSnapshot.getKey());
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", 1);
                 setResult(Activity.RESULT_OK, returnIntent);
-                finish();
+                finish();*/
             }
 
             @Override

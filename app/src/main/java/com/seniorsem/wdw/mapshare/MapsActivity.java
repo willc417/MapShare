@@ -117,7 +117,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                User currUser = dataSnapshot.getValue(User.class);
+                if (currUser.getCreatedMaps() != null) {
+                    List<Map> createdMaps = currUser.getCreatedMaps();
+                    for (int i = 0; i < createdMaps.size(); i++) {
+                        List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
+                        if (myMarkers != null) {
+                            for (int j = 0; j < myMarkers.size(); j++) {
+                                Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+                            }
+                        }
 
+                    }
+                }
             }
 
             @Override
