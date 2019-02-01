@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -47,7 +48,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager locationManager;
     private float zoomLevel = 15.5f;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,20 +59,100 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         requestNeededPermission();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        final FloatingActionButton fabHide = (FloatingActionButton) findViewById(R.id.fabHide);
+        final FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_1);
+        final FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_2);
+        //Need more appropriate icon. fab2
+        final FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_3);
+        //Need more appropriate icon. fab3
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Click action
-                Toast.makeText(MapsActivity.this, "TESTING", Toast.LENGTH_LONG).show();
-               Intent intentMain = new Intent();
+                //Click Action
+                //Creates a FAB for intent 1
+                Toast.makeText(MapsActivity.this, "Open", Toast.LENGTH_LONG).show();
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
+                layoutParams.bottomMargin += (int) (fab1.getHeight() * 1.5);
+                fab1.setLayoutParams(layoutParams);
+                fab1.setClickable(true);
+                fab1.show();
+
+                //Creates a FAB for intent 2
+                layoutParams = (FrameLayout.LayoutParams) fab2.getLayoutParams();
+                layoutParams.bottomMargin += (int) (fab2.getHeight() * 2.75);
+                fab2.setLayoutParams(layoutParams);
+                fab2.setClickable(true);
+                fab2.show();
+
+                //Creates a FAB for intent 3
+                layoutParams = (FrameLayout.LayoutParams) fab3.getLayoutParams();
+                layoutParams.bottomMargin += (int) (fab3.getHeight() * 4);
+                fab3.setLayoutParams(layoutParams);
+                fab3.setClickable(true);
+                fab3.show();
+
+                //Hides Menu FAB. Shows cancel FAB
+                fab.hide();
+                fab.setClickable(false);
+                fabHide.show();
+                fabHide.setClickable(true);
+
+            }
+        });
+        //Cancel FAB listener
+        fabHide.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                //On Click, Sets children FABs to original location and not clickable
+                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
+                layoutParams.bottomMargin -= (int) (fab1.getHeight() * 1.5);
+                fab1.setLayoutParams(layoutParams);
+                fab1.setClickable(false);
+                fab1.hide();
+
+                layoutParams = (FrameLayout.LayoutParams) fab2.getLayoutParams();
+                layoutParams.bottomMargin -= (int) (fab2.getHeight() * 2.75);
+                fab2.setLayoutParams(layoutParams);
+                fab2.setClickable(false);
+                fab2.hide();
+
+                layoutParams = (FrameLayout.LayoutParams) fab3.getLayoutParams();
+                layoutParams.bottomMargin -= (int) (fab3.getHeight() * 4);
+                fab3.setLayoutParams(layoutParams);
+                fab3.setClickable(false);
+                fab3.hide();
+
+                fab.show();
+                fab.setClickable(true);
+                fabHide.hide();
+                fabHide.setClickable(false);
+            }
+        });
+        fab1.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Toast.makeText(MapsActivity.this, "FAB1 Test", Toast.LENGTH_LONG).show();
+                Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, CreateMapActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
 
+        fab2.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Toast.makeText(MapsActivity.this, "FAB2 Test", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        fab3.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                Toast.makeText(MapsActivity.this,"FAB3 Test", Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
