@@ -59,6 +59,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         requestNeededPermission();
 
+        ///////FAB CODE///////
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final FloatingActionButton fabHide = (FloatingActionButton) findViewById(R.id.fabHide);
         final FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_1);
@@ -69,59 +70,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Click Action
-                //Creates a FAB for intent 1
-                Toast.makeText(MapsActivity.this, "Open", Toast.LENGTH_LONG).show();
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-                layoutParams.bottomMargin += (int) (fab1.getHeight() * 1.5);
-                fab1.setLayoutParams(layoutParams);
-                fab1.setClickable(true);
-                fab1.show();
-
-                //Creates a FAB for intent 2
-                layoutParams = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-                layoutParams.bottomMargin += (int) (fab2.getHeight() * 2.75);
-                fab2.setLayoutParams(layoutParams);
-                fab2.setClickable(true);
-                fab2.show();
-
-                //Creates a FAB for intent 3
-                layoutParams = (FrameLayout.LayoutParams) fab3.getLayoutParams();
-                layoutParams.bottomMargin += (int) (fab3.getHeight() * 4);
-                fab3.setLayoutParams(layoutParams);
-                fab3.setClickable(true);
-                fab3.show();
-
-                //Hides Menu FAB. Shows cancel FAB
+                //Shows menu FABs
+                FABSHOW(fab1,fab2,fab3);
                 fab.hide();
                 fab.setClickable(false);
                 fabHide.show();
                 fabHide.setClickable(true);
-
             }
         });
-        //Cancel FAB listener
         fabHide.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                //On Click, Sets children FABs to original location and not clickable
-                FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fab1.getLayoutParams();
-                layoutParams.bottomMargin -= (int) (fab1.getHeight() * 1.5);
-                fab1.setLayoutParams(layoutParams);
-                fab1.setClickable(false);
-                fab1.hide();
-
-                layoutParams = (FrameLayout.LayoutParams) fab2.getLayoutParams();
-                layoutParams.bottomMargin -= (int) (fab2.getHeight() * 2.75);
-                fab2.setLayoutParams(layoutParams);
-                fab2.setClickable(false);
-                fab2.hide();
-
-                layoutParams = (FrameLayout.LayoutParams) fab3.getLayoutParams();
-                layoutParams.bottomMargin -= (int) (fab3.getHeight() * 4);
-                fab3.setLayoutParams(layoutParams);
-                fab3.setClickable(false);
-                fab3.hide();
-
+                //Hides Menu FABs
+                FABHIDE(fab1, fab2, fab3);
                 fab.show();
                 fab.setClickable(true);
                 fabHide.hide();
@@ -130,28 +90,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         fab1.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Toast.makeText(MapsActivity.this, "FAB1 Test", Toast.LENGTH_LONG).show();
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, CreateMapActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
-
         fab2.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Toast.makeText(MapsActivity.this, "FAB2 Test", Toast.LENGTH_LONG).show();
+                //REPLACE WITH INTENT CHANGE
             }
         });
-
         fab3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Toast.makeText(MapsActivity.this,"FAB3 Test", Toast.LENGTH_LONG).show();
+                //REPLACE WITH INTENT CHANGE
             }
         });
-
+    }
+    //FAB FUNCTIONS
+    public void FABSHOW(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
+        //Buttons Originally Hidden behind main FAB. Moves them to positions, and sets clickable and show
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
+        layoutParams.bottomMargin += (int) (faba.getHeight() * 1.5);
+        faba.setLayoutParams(layoutParams);
+        faba.setClickable(true);
+        faba.show();////////////////////////////
+        layoutParams = (FrameLayout.LayoutParams) fabb.getLayoutParams();
+        layoutParams.bottomMargin += (int) (fabb.getHeight() * 2.75);
+        fabb.setLayoutParams(layoutParams);
+        fabb.setClickable(true);
+        fabb.show();////////////////////////////
+        layoutParams = (FrameLayout.LayoutParams) fabc.getLayoutParams();
+        layoutParams.bottomMargin += (int) (fabc.getHeight() * 4);
+        fabc.setLayoutParams(layoutParams);
+        fabc.setClickable(true);
+        fabc.show();
     }
 
+    public void FABHIDE(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
+        //Moves new FABs behind main FAB. Not clickable or shown
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
+        layoutParams.bottomMargin -= (int) (faba.getHeight() * 1.5);
+        faba.setLayoutParams(layoutParams);
+        faba.setClickable(false);
+        faba.hide();////////////////////////////
+        layoutParams = (FrameLayout.LayoutParams) fabb.getLayoutParams();
+        layoutParams.bottomMargin -= (int) (fabb.getHeight() * 2.75);
+        fabb.setLayoutParams(layoutParams);
+        fabb.setClickable(false);
+        fabb.hide();////////////////////////////
+        layoutParams = (FrameLayout.LayoutParams) fabc.getLayoutParams();
+        layoutParams.bottomMargin -= (int) (fabc.getHeight() * 4);
+        fabc.setLayoutParams(layoutParams);
+        fabc.setClickable(false);
+        fabc.hide();
+    }
+    ///////FAB CODE///////
 
 
     @Override

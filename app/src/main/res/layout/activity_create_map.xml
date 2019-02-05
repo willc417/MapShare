@@ -1,89 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".CreateMapActivity">
-
-
-    <LinearLayout
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp">
-
-        <TextView
-            android:id="@+id/create_map_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/title_create_map"
-            android:textSize="30sp" />
-
-        <EditText
-            android:id="@+id/et_map_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/enter_title" />
-
-        <EditText
-            android:id="@+id/et_map_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="@string/write_description" />
-
-        <Spinner
-            android:id="@+id/privacy_sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:padding="20dp"
+        tools:context=".CreateMapActivity">
 
 
-        <EditText
-            android:id="@+id/markerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="marker title" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <EditText
-            android:id="@+id/markerDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="marker desc" />
+            <TextView
+                android:id="@+id/create_map_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/title_create_map"
+                android:textSize="30sp" />
 
-        <EditText
-            android:id="@+id/markerLon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Lon" />
+            <EditText
+                android:id="@+id/et_map_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/enter_title" />
 
-        <EditText
-            android:id="@+id/markerLat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="marker Lat"/>
+            <EditText
+                android:id="@+id/et_map_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/write_description" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerViewMarkers"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/privacy_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
 
-        </android.support.v7.widget.RecyclerView>
+            <EditText
+                android:id="@+id/markerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="marker title" />
 
-        <Button
-            android:id="@+id/btn_add_marker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Marker" />
+            <EditText
+                android:id="@+id/markerDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="marker desc" />
 
-        <Button
-            android:id="@+id/btn_create_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/create_map" />
+            <EditText
+                android:id="@+id/markerLon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="marker Lon" />
 
-    </LinearLayout>
+            <EditText
+                android:id="@+id/markerLat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="marker Lat"/>
 
-</ScrollView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewMarkers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+            <Button
+                android:id="@+id/btn_add_marker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Marker" />
+
+            <Button
+                android:id="@+id/btn_create_map"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_map" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <include layout="@layout/content_main" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_add" />
+    <include layout="@layout/fab_layout"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabHide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:visibility="invisible"
+        android:src="@android:drawable/ic_menu_close_clear_cancel" />
+
+</android.support.design.widget.CoordinatorLayout>
