@@ -1,6 +1,8 @@
 package com.seniorsem.wdw.mapshare.data;
 
-public class MyMarker {
+import java.io.Serializable;
+
+public class MyMarker implements Serializable{
 
     private Double Lat;
     private Double Lon;

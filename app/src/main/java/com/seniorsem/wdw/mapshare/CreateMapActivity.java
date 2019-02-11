@@ -57,14 +57,6 @@ public class CreateMapActivity extends AppCompatActivity {
     @BindView(R.id.privacy_sp)
     Spinner spPrivacy;
 
-    @BindView(R.id.markerTitle)
-    EditText etMarkerTitle;
-    @BindView(R.id.markerDesc)
-    EditText etMarkerDesc;
-    @BindView(R.id.markerLon)
-    EditText etMarkerLon;
-    @BindView(R.id.markerLat)
-    EditText etMarkerLat;
 
 
     int spinner_position;
@@ -191,13 +183,11 @@ public class CreateMapActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_add_marker)
     void addMarker() {
-        String titleEntered = etMarkerTitle.getText().toString();
-        String descEntered = etMarkerDesc.getText().toString();
-        Double LatEntered = Double.parseDouble(etMarkerLat.getText().toString());
-        Double LonEntered = Double.parseDouble(etMarkerLon.getText().toString());
-
-        MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, null, null, null, null);
-        viewMarkersRecyclerAdapter.addMarker(newMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
+        Intent CreateNewMarker = new Intent();
+        CreateNewMarker.setClass(CreateMapActivity.this, CreateAndEditMarkerActivity.class);
+       // MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, null, null, null, null);
+        startActivityForResult(CreateNewMarker, 1);
+        //viewMarkersRecyclerAdapter.addMarker(newMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
 
     }
 
@@ -253,4 +243,18 @@ public class CreateMapActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                Log.d("TAG_UI", "onActivityResult");
+                MyMarker myMarker = (MyMarker) data.getExtras().getSerializable("NewMarker");
+                viewMarkersRecyclerAdapter.addMarker(myMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
+            }
+        }
+    }
+
+
 }
