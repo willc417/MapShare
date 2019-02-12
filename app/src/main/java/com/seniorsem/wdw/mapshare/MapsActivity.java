@@ -129,6 +129,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fabc.show();
     }
 
+
+        /*
+        Button btn = (Button)findViewById(R.id.temp_button);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MapsActivity.this, ProfileActivity.class));
+            }
+        });
+        */
+
     public void FABHIDE(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
         //Moves new FABs behind main FAB. Not clickable or shown
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
@@ -146,6 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fabc.setLayoutParams(layoutParams);
         fabc.setClickable(false);
         fabc.hide();
+
     }
     ///////FAB CODE///////
 
