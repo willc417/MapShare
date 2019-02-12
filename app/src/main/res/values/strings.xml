@@ -14,6 +14,7 @@
     <string name="enter_title">Enter Map Title</string>
     <string name="create_map">Create Map</string>
     <string name="write_description">Write Description</string>
+    <string name="create">Create</string>
     <string name="number_created">Maps Created</string>
     <string name="maps_followed">Maps Followed</string>
 </resources>

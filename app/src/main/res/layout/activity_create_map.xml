@@ -48,31 +48,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-
-            <EditText
-                android:id="@+id/markerTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="marker title" />
-
-            <EditText
-                android:id="@+id/markerDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="marker desc" />
-
-            <EditText
-                android:id="@+id/markerLon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="marker Lon" />
-
-            <EditText
-                android:id="@+id/markerLat"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="marker Lat"/>
-
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerViewMarkers"
                 android:layout_width="wrap_content"

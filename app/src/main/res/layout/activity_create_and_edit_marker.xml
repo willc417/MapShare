@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".CreateAndEditMarkerActivity">
+
+    <LinearLayout
+        android:id="@+id/btnLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:weightSum="60">
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/searchBtn"
+            app:cb_color="#FFFFFF"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="20"
+            android:src="@drawable/search" />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/coordinatesBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="20"
+            app:cb_color="#FFFFFF"
+            android:src="@drawable/lat_lon_globe"
+            />
+
+        <at.markushi.ui.CircleButton
+            android:id="@+id/currLocBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:cb_color="#FFFFFF"
+            android:layout_weight="20"
+            android:src="@drawable/current_location"
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnLayout"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Type in Address" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/coordinatesLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnLayout"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/markerLon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="marker Lon" />
+
+        <EditText
+            android:id="@+id/markerLat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="marker Lat" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/currLocLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnLayout"
+        android:visibility="invisible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/currLat"
+            android:text="Push Button for Current Lat"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/currLon"
+            android:text="Push Button for Current Lon"
+            android:layout_toRightOf="@+id/currLat"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nearbyAddress"
+            android:layout_below="@+id/currLat"/>
+
+        <Button
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/currLat"
+            android:id="@+id/getCurrLocBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Get Current Location" />
+
+
+
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/markerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:hint="marker title" />
+
+    <EditText
+        android:id="@+id/markerDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/markerTitle"
+        android:layout_centerHorizontal="true"
+
+        android:hint="marker desc" />
+
+    <Button
+        android:id="@+id/CreateBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/create" />
+
+</RelativeLayout>

@@ -41,8 +41,9 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".ViewMapsActivity" />
-        <activity android:name=".CreateMapActivity"></activity>
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".CreateMapActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".CreateAndEditMarkerActivity"></activity>
     </application>
 
 </manifest>
