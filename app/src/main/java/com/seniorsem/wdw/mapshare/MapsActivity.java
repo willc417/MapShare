@@ -171,14 +171,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
+        final double longitude = location.getLongitude();
+        final double latitude = location.getLatitude();
 
         LatLng player = new LatLng(latitude, longitude);
         googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
         AddMarkers(googleMap);
+
+        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
+                    Toast.makeText(MapsActivity.this, "Marker Click Test", Toast.LENGTH_LONG).show();
+
+                    Intent ViewNearbyMarker = new Intent();
+                    ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
+                    startActivity(ViewNearbyMarker);
+                }
+                else {
+                    Toast.makeText(MapsActivity.this, "Move closer to unlock content", Toast.LENGTH_LONG).show();
+                }
+                return false;
+            }
+        });
 
 
     }
@@ -196,6 +213,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if (myMarkers != null) {
                             for (int j = 0; j < myMarkers.size(); j++) {
                                 Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+
                             }
                         }
 
