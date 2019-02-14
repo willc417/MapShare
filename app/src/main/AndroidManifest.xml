@@ -43,7 +43,8 @@
         <activity android:name=".ViewMapsActivity" />
         <activity android:name=".CreateMapActivity" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".CreateAndEditMarkerActivity"></activity>
+        <activity android:name=".CreateAndEditMarkerActivity" />
+        <activity android:name=".ViewNearbyMarkerActivity"></activity>
     </application>
 
 </manifest>
