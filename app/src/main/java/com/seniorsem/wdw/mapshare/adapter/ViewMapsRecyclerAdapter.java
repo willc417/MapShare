@@ -10,11 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
+
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
 import com.seniorsem.wdw.mapshare.R;
 import com.seniorsem.wdw.mapshare.data.Map;
 
@@ -101,13 +100,13 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         }
     }
 
-    public void removeMap(int index) {
+    /*public void removeMap(int index) {
         FirebaseDatabase.getInstance().getReference("posts").child(
                 mapKeys.get(index)).removeValue();
         mapList.remove(index);
         mapKeys.remove(index);
         notifyItemRemoved(index);
-    }
+    }*/
 
     public void removeMapByKey(String key) {
         int index = mapKeys.indexOf(key);

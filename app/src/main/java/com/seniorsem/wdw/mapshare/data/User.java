@@ -5,13 +5,13 @@ import java.util.List;
 public class User {
 
     private String UID;
-    private List<Map> createdMaps;
-    private List<Map> subMaps;
-    private List<User> Friends;
+    private List<String> createdMaps;
+    private List<String> subMaps;
+    private List<String> Friends;
 
     public User() {}
 
-    public User(String UID, List<Map> createdMaps, List<Map> subMaps, List<User> friends) {
+    public User(String UID, List<String> createdMaps, List<String> subMaps, List<String> friends) {
 
         this.UID = UID;
         this.createdMaps = createdMaps;
@@ -28,31 +28,27 @@ public class User {
         this.UID = UID;
     }
 
-    public List<Map> getCreatedMaps() {
+    public List<String> getCreatedMaps() {
         return createdMaps;
     }
 
-    public void setCreatedMaps(List<Map> createdMaps) {
+    public void setCreatedMaps(List<String> createdMaps) {
         this.createdMaps = createdMaps;
     }
 
-    public List<Map> getSubMaps() {
+    public List<String> getSubMaps() {
         return subMaps;
     }
 
-    public void setSubMaps(List<Map> subMaps) {
+    public void setSubMaps(List<String> subMaps) {
         this.subMaps = subMaps;
     }
 
-    public List<User> getFriends() {
+    public List<String> getFriends() {
         return Friends;
     }
 
-    public void setFriends(List<User> friends) {
+    public void setFriends(List<String> friends) {
         Friends = friends;
-    }
-
-    public void addMap(Map mapToAdd){
-        this.createdMaps.add(mapToAdd);
     }
 }
