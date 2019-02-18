@@ -18,14 +18,12 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.seniorsem.wdw.mapshare.adapter.ViewMapsRecyclerAdapter;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.adapter.ViewMarkersRecyclerAdapter;
 import com.seniorsem.wdw.mapshare.data.Map;
 
@@ -194,54 +192,40 @@ public class CreateMapActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_create_map)
     void createMapClick() {
-        final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("User");
-        dbRef.orderByChild("uid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail()).addChildEventListener(new ChildEventListener() {
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        List<MyMarker> myMarkers = viewMarkersRecyclerAdapter.getMyMarkerList();
+
+        String titleEntered = etMapTitle.getText().toString();
+        String descEntered = etMapDesc.getText().toString();
+
+        Date currentTime = Calendar.getInstance().getTime();
+
+        Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered);
+
+        final String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + titleEntered.replace(" ", "_");
+
+        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User currUser = dataSnapshot.getValue(User.class);
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User newUser = documentSnapshot.toObject(User.class);
 
-                Log.d("TAG_UI", "createMapClick");
-                String key = dataSnapshot.getKey();
-                List<Map> createdMaps;
-                if (currUser.getCreatedMaps() != null) {
-                    createdMaps = currUser.getCreatedMaps();
-                } else {
-                    createdMaps = new ArrayList<Map>();
-                }
-                List<MyMarker> myMarkers = viewMarkersRecyclerAdapter.getMyMarkerList();
+                List<String> currMaps = newUser.getCreatedMaps();
+                currMaps.add(mapKey);
 
-                String titleEntered = etMapTitle.getText().toString();
-                String descEntered = etMapDesc.getText().toString();
+                newUser.setCreatedMaps(currMaps);
 
-                Date currentTime = Calendar.getInstance().getTime();
+                db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
 
-
-                Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getUid(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered);
-                createdMaps.add(newMap);
-                currUser.setCreatedMaps(createdMaps);
-                dbRef.child(key).setValue(currUser);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                //db.collection("users").document(newUser.getUID()).set(newUser);
 
             }
         });
+
+        db.collection("createdMaps").document(mapKey).set(newMap);
+
+
     }
 
     @Override

@@ -30,13 +30,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 import com.seniorsem.wdw.mapshare.data.User;
@@ -98,14 +96,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         fab2.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Toast.makeText(MapsActivity.this, "FAB2 Test", Toast.LENGTH_LONG).show();
-                //REPLACE WITH INTENT CHANGE
+                Intent intentMain = new Intent();
+                intentMain.setClass(MapsActivity.this, ViewMapsActivity.class);
+                Log.d("TAG_UI", "HERE");
+                startActivity(intentMain);
             }
         });
         fab3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Toast.makeText(MapsActivity.this,"FAB3 Test", Toast.LENGTH_LONG).show();
-                //REPLACE WITH INTENT CHANGE
+                Intent intentMain = new Intent();
+                intentMain.setClass(MapsActivity.this, ProfileActivity.class);
+                Log.d("TAG_UI", "HERE");
+                startActivity(intentMain);
             }
         });
     }
@@ -183,7 +185,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
+                    if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
                     Toast.makeText(MapsActivity.this, "Marker Click Test", Toast.LENGTH_LONG).show();
 
                     Intent ViewNearbyMarker = new Intent();
@@ -201,60 +203,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void AddMarkers(final GoogleMap googleMap) {
-        final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("User");
-        dbRef.orderByChild("uid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail()).addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User currUser = dataSnapshot.getValue(User.class);
-                if (currUser.getCreatedMaps() != null) {
-                    List<Map> createdMaps = currUser.getCreatedMaps();
-                    for (int i = 0; i < createdMaps.size(); i++) {
-                        List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
-                        if (myMarkers != null) {
-                            for (int j = 0; j < myMarkers.size(); j++) {
-                                Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
 
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User newUser = documentSnapshot.toObject(User.class);
+
+                List<String> currMaps = newUser.getCreatedMaps();
+
+                for (int i = 0; i < currMaps.size(); i++) {
+
+                    db.collection("createdMaps").document(currMaps.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Map displayMap = documentSnapshot.toObject(Map.class);
+                            List<MyMarker> myMarkers = displayMap.getMyMarkers();
+                            for (int j = 0; j < myMarkers.size(); j++) {
+                                googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
                             }
                         }
-
-                    }
+                    });
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                User currUser = dataSnapshot.getValue(User.class);
-                if (currUser.getCreatedMaps() != null) {
-                    List<Map> createdMaps = currUser.getCreatedMaps();
-                    for (int i = 0; i < createdMaps.size(); i++) {
-                        List<MyMarker> myMarkers = createdMaps.get(i).getMyMarkers();
-                        if (myMarkers != null) {
-                            for (int j = 0; j < myMarkers.size(); j++) {
-                                Marker newMarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
-                            }
-                        }
-
-                    }
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
             }
         });
-
-
     }
 
     private void requestNeededPermission() {

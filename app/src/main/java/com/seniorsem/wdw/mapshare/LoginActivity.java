@@ -15,12 +15,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.User;
 
@@ -107,28 +109,33 @@ public class LoginActivity extends AppCompatActivity {
 
 
                         if (task.isSuccessful()) {
-                            FirebaseUser fbUser = task.getResult().getUser();
+                            final FirebaseUser fbUser = task.getResult().getUser();
 
                             fbUser.updateProfile(new UserProfileChangeRequest.Builder().
                                     setDisplayName(usernameFromEmail(fbUser.getEmail())).build());
 
                             Toast.makeText(LoginActivity.this, "User created", Toast.LENGTH_SHORT).show();
 
-                            String key = FirebaseDatabase.getInstance().getReference().child("User").push().getKey();
-                            List<Map> createdMaps = new ArrayList<>();
-                            List<Map> subMaps = new ArrayList<>();
-                            List<User> friends = new ArrayList<>();
+                            List<String> createdMaps = new ArrayList<>();
+                            List<String> subMaps = new ArrayList<>();
+                            List<String> friends = new ArrayList<>();
 
                             User newUser = new User(
                                     fbUser.getEmail(), createdMaps, subMaps, friends);
 
-                            FirebaseDatabase.getInstance().getReference().child("User").child(key).setValue(newUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                            db.collection("users").document(fbUser.getEmail()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    //could move to Map from here. 
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(LoginActivity.this, "User Successfully Registered",
+                                            Toast.LENGTH_SHORT).show();
+
+                                    db.collection("users").document(fbUser.getEmail()).collection("createdMaps").document();
+                                    db.collection("users").document(fbUser.getEmail()).collection("subMaps").document();
+                                    db.collection("users").document(fbUser.getEmail()).collection("friends").document();
                                 }
                             });
-
                         } else {
                             Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
                                     Toast.LENGTH_SHORT).show();

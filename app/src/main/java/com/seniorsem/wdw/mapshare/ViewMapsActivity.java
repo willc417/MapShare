@@ -12,12 +12,11 @@ import android.widget.EditText;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.adapter.ViewMapsRecyclerAdapter;
 import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
@@ -62,16 +61,46 @@ public class ViewMapsActivity extends AppCompatActivity {
     void switchMaps() {
         if (viewingCreated) {
             viewingCreated = false;
-            btnSwitch.setText("Saved Maps"); }
-        else {
+            btnSwitch.setText("Saved Maps");
+        } else {
             viewingCreated = true;
-            btnSwitch.setText("Created Maps"); }
-            viewMapsRecyclerAdapter.removeAll();
-            initPosts();
+            btnSwitch.setText("Created Maps");
+        }
+        viewMapsRecyclerAdapter.removeAll();
+        initPosts();
     }
 
     private void initPosts() {
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currUser = documentSnapshot.toObject(User.class);
+                List<String> MapKeys;
+                String collectionKey = "";
+
+                if (viewingCreated) {
+                    MapKeys = currUser.getCreatedMaps();
+                    collectionKey = "createdMaps";}
+                else
+                {
+                    MapKeys = currUser.getSubMaps();
+                    collectionKey = "subMaps";
+
+                }
+                for (int i = 0; i < MapKeys.size(); i++) {
+                    db.collection(collectionKey).document(MapKeys.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Map displayMap = documentSnapshot.toObject(Map.class);
+                            viewMapsRecyclerAdapter.addMap(displayMap, documentSnapshot.getId());
+                        }
+                    });
+                }
+            }
+        });
+        /*
         final DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("User");
         dbRef.orderByChild("uid").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
@@ -98,7 +127,7 @@ public class ViewMapsActivity extends AppCompatActivity {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", 1);
                 setResult(Activity.RESULT_OK, returnIntent);
-                finish();*/
+                finish();
             }
 
             @Override
@@ -111,5 +140,6 @@ public class ViewMapsActivity extends AppCompatActivity {
 
             }
         });
+    } */
     }
 }
