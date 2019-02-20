@@ -107,7 +107,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fab3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Intent intentMain = new Intent();
-                intentMain.setClass(MapsActivity.this, ProfileActivity.class);
+                intentMain.setClass(MapsActivity.this, FindFriendsActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
@@ -193,7 +193,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         LatLng player = new LatLng(latitude, longitude);
-        googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
+        googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
         AddMarkers(googleMap);
