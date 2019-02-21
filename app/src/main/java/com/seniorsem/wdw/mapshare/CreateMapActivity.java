@@ -1,6 +1,7 @@
 package com.seniorsem.wdw.mapshare;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,11 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,6 +49,11 @@ import butterknife.OnItemSelected;
 
 public class CreateMapActivity extends AppCompatActivity {
 
+
+    Map editMap;
+
+    @BindView(R.id.create_map_title)
+    TextView pageHeading;
     @BindView(R.id.et_map_title)
     EditText etMapTitle;
     @BindView(R.id.et_map_desc)
@@ -56,7 +64,7 @@ public class CreateMapActivity extends AppCompatActivity {
     Spinner spPrivacy;
 
 
-
+    FirebaseFirestore db;
     int spinner_position;
     private ViewMarkersRecyclerAdapter viewMarkersRecyclerAdapter;
 
@@ -72,6 +80,7 @@ public class CreateMapActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spPrivacy.setAdapter(spinnerAdapter);
 
+        db = FirebaseFirestore.getInstance();
 
         viewMarkersRecyclerAdapter = new ViewMarkersRecyclerAdapter(getApplicationContext(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -83,6 +92,12 @@ public class CreateMapActivity extends AppCompatActivity {
         layoutManager.setStackFromEnd(true);
         recyclerViewPlaces.setLayoutManager(layoutManager);
         recyclerViewPlaces.setAdapter(viewMarkersRecyclerAdapter);
+
+        String isEdit = getIntent().getStringExtra("isEdit");
+        if (isEdit != null){
+            fillFields(isEdit);
+        }
+
 
         ///////FAB CODE///////
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -134,6 +149,7 @@ public class CreateMapActivity extends AppCompatActivity {
         });
         //END OF FAB
     }
+
     //FAB FUNCTIONS
     public void FABSHOW(final FloatingActionButton fabA, final FloatingActionButton fabB, final FloatingActionButton fabC){
         //Buttons Originally Hidden behind main FAB. Moves them to positions, and sets clickable and show
@@ -189,12 +205,35 @@ public class CreateMapActivity extends AppCompatActivity {
 
     }
 
+    private void fillFields(final String documentKey) {
+
+        pageHeading.setText("Edit Your Map");
+
+        db.collection("createdMaps").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                editMap = documentSnapshot.toObject(Map.class);
+                etMapTitle.setText(editMap.getTitle());
+                etMapDesc.setText(editMap.getDescription());
+                spPrivacy.setSelection(editMap.getPrivacy());
+
+                List<MyMarker> myMarkers = editMap.getMyMarkers();
+                for (int i = 0; i < myMarkers.size(); i++) {
+                    viewMarkersRecyclerAdapter.addMarker(myMarkers.get(i), String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
+                }
+
+            }}).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreateMapActivity.this, "Map Edit Error",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        }
+
 
     @OnClick(R.id.btn_create_map)
     void createMapClick() {
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         List<MyMarker> myMarkers = viewMarkersRecyclerAdapter.getMyMarkerList();
 
         String titleEntered = etMapTitle.getText().toString();
@@ -212,18 +251,20 @@ public class CreateMapActivity extends AppCompatActivity {
                 User newUser = documentSnapshot.toObject(User.class);
 
                 List<String> currMaps = newUser.getCreatedMaps();
+
                 currMaps.add(mapKey);
 
                 newUser.setCreatedMaps(currMaps);
 
                 db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
 
-                //db.collection("users").document(newUser.getUID()).set(newUser);
 
             }
         });
 
         db.collection("createdMaps").document(mapKey).set(newMap);
+
+        finish();
 
 
     }

@@ -2,9 +2,10 @@ package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.seniorsem.wdw.mapshare.CreateMapActivity;
 import com.seniorsem.wdw.mapshare.R;
+import com.seniorsem.wdw.mapshare.ViewMapsActivity;
 import com.seniorsem.wdw.mapshare.data.Map;
 
 import java.util.ArrayList;
@@ -50,10 +54,8 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.tvCreator.setText(context.getString(R.string.creator,
-                mapList.get(holder.getAdapterPosition()).getCreaterUID()));
-        holder.tvTitle.setText(context.getString(R.string.title,
-                mapList.get(holder.getAdapterPosition()).getTitle()));
+        holder.tvCreator.setText(mapList.get(holder.getAdapterPosition()).getCreaterUID());
+        holder.tvTitle.setText(mapList.get(holder.getAdapterPosition()).getTitle());
         holder.tvDescription.setText(
                 mapList.get(holder.getAdapterPosition()).getDescription());
         holder.date.setText(context.getString(R.string.date,
@@ -61,17 +63,30 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
 
         setAnimation(holder.itemView, position);
 
-        /*if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(postList.get(holder.getAdapterPosition()).getUid())) {
+        if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(
+                mapList.get(holder.getAdapterPosition()).getCreaterUID())) {
+
+            holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent EditIntent = new Intent();
+                    EditIntent.setClass(context, CreateMapActivity.class);
+                    String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + (mapList.get(holder.getAdapterPosition()).getTitle()).replace(" ", "_");
+                    EditIntent.putExtra("isEdit", mapKey);
+                    context.startActivity(EditIntent);
+                }
+            });
+
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removePost(holder.getAdapterPosition());
+                    removeMap(holder.getAdapterPosition());
                 }
             });
         } else {
             holder.btnDelete.setVisibility(View.GONE);
-        }*/
-
+            holder.btnEdit.setVisibility(View.GONE);
+        }
       /*  if(!TextUtils.isEmpty(postList.get(holder.getAdapterPosition()).
 
                 getImageUrl()))
@@ -100,13 +115,14 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         }
     }
 
-    /*public void removeMap(int index) {
-        FirebaseDatabase.getInstance().getReference("posts").child(
-                mapKeys.get(index)).removeValue();
+    public void removeMap(int index) {
+        String docKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + mapList.get(index).getTitle().replace(" ", "_");
+        String userKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        ViewMapsActivity.deleteMap(docKey, userKey);
         mapList.remove(index);
         mapKeys.remove(index);
         notifyItemRemoved(index);
-    }*/
+    }
 
     public void removeMapByKey(String key) {
         int index = mapKeys.indexOf(key);
@@ -142,12 +158,17 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         public TextView tvTitle;
         public TextView tvDescription;
         public TextView date;
+        public at.markushi.ui.CircleButton btnDelete;
+        public at.markushi.ui.CircleButton btnEdit;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             tvCreator = itemView.findViewById(R.id.tvCreator);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDescription = itemView.findViewById(R.id.tvDescription);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
             date = itemView.findViewById(R.id.date);
         }
     }
