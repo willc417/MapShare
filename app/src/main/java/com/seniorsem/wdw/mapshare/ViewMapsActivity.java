@@ -1,27 +1,19 @@
 package com.seniorsem.wdw.mapshare;
 
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.adapter.ViewMapsRecyclerAdapter;
 import com.seniorsem.wdw.mapshare.data.Map;
-import com.seniorsem.wdw.mapshare.data.MyMarker;
 import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.List;
@@ -33,13 +25,14 @@ import butterknife.OnClick;
 public class ViewMapsActivity extends AppCompatActivity {
 
     private ViewMapsRecyclerAdapter viewMapsRecyclerAdapter;
+    private ProgressDialog progressDialog;
     static FirebaseFirestore db;
 
-    static Context context;
+    Context context;
 
     @BindView(R.id.switchBtn)
     Button btnSwitch;
-    public boolean viewingCreated = true;
+    public boolean viewingCreated;
 
 
     @Override
@@ -47,6 +40,7 @@ public class ViewMapsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_maps);
 
+        viewingCreated = true;
         context = getApplicationContext();
         db = FirebaseFirestore.getInstance();
 
@@ -63,11 +57,19 @@ public class ViewMapsActivity extends AppCompatActivity {
         recyclerViewPlaces.setAdapter(viewMapsRecyclerAdapter);
         ButterKnife.bind(this);
 
+        //initPosts();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewMapsRecyclerAdapter.removeAll();
         initPosts();
     }
 
     @OnClick(R.id.switchBtn)
     void switchMaps() {
+        showProgressDialog();
         if (viewingCreated) {
             viewingCreated = false;
             btnSwitch.setText("Saved Maps");
@@ -77,6 +79,8 @@ public class ViewMapsActivity extends AppCompatActivity {
         }
         viewMapsRecyclerAdapter.removeAll();
         initPosts();
+        hideProgressDialog();
+
     }
 
     private void initPosts() {
@@ -85,19 +89,14 @@ public class ViewMapsActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currUser = documentSnapshot.toObject(User.class);
                 List<String> MapKeys;
-                String collectionKey = "";
 
                 if (viewingCreated) {
                     MapKeys = currUser.getCreatedMaps();
-                    collectionKey = "createdMaps";}
-                else
-                {
+                } else {
                     MapKeys = currUser.getSubMaps();
-                    collectionKey = "subMaps";
-
                 }
                 for (int i = 0; i < MapKeys.size(); i++) {
-                    db.collection(collectionKey).document(MapKeys.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    db.collection("createdMaps").document(MapKeys.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             Map displayMap = documentSnapshot.toObject(Map.class);
@@ -110,23 +109,19 @@ public class ViewMapsActivity extends AppCompatActivity {
 
     }
 
-    public static void deleteMap(final String mapDocKey, final String userKey) {
-        db.collection("users").document(userKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User u = documentSnapshot.toObject(User.class);
+    public void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Switching...");
+        }
 
-                u.getCreatedMaps().remove(mapDocKey);
-
-                db.collection("users").document(userKey).update("createdMaps", u.getCreatedMaps());
-            }
-        });
-
-        db.collection("createdMaps").document(mapDocKey).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-                Toast.makeText(context, "Removed Map", Toast.LENGTH_SHORT).show();
-            }
-        });
+        progressDialog.show();
     }
+
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
+
 }

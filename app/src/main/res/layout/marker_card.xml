@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     style="@style/CardView.Light"
     android:layout_width="wrap_content"
@@ -53,8 +53,7 @@
             android:layout_height="40dp"
             android:src="@drawable/edit"
             app:cb_color="#FFFFFF"
-            app:cb_pressedRingWidth="10dip"
-            android:text="Edit"
+            android:text="@string/edit"
             />
 
         <at.markushi.ui.CircleButton
@@ -65,8 +64,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:cb_color="#FFFFFF"
-            app:cb_pressedRingWidth="10dip"
-            android:text="Delete" />
+            android:text="@string/delete" />
 
 
     </RelativeLayout>

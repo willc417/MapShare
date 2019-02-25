@@ -13,9 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.seniorsem.wdw.mapshare.CreateAndEditMarkerActivity;
-import com.seniorsem.wdw.mapshare.CreateMapActivity;
 import com.seniorsem.wdw.mapshare.R;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 
