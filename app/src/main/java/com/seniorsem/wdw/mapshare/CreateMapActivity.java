@@ -1,6 +1,8 @@
 package com.seniorsem.wdw.mapshare;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,32 +15,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.adapter.ViewMarkersRecyclerAdapter;
 import com.seniorsem.wdw.mapshare.data.Map;
 
-import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 
-
 import java.util.Date;
 import java.util.List;
 
-import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -46,6 +45,15 @@ import butterknife.OnItemSelected;
 
 public class CreateMapActivity extends AppCompatActivity {
 
+
+    Map editMap;
+    String isEdit;
+    private ProgressDialog progressDialog;
+
+
+
+    @BindView(R.id.create_map_title)
+    TextView pageHeading;
     @BindView(R.id.et_map_title)
     EditText etMapTitle;
     @BindView(R.id.et_map_desc)
@@ -56,7 +64,7 @@ public class CreateMapActivity extends AppCompatActivity {
     Spinner spPrivacy;
 
 
-
+    FirebaseFirestore db;
     int spinner_position;
     private ViewMarkersRecyclerAdapter viewMarkersRecyclerAdapter;
 
@@ -72,6 +80,7 @@ public class CreateMapActivity extends AppCompatActivity {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spPrivacy.setAdapter(spinnerAdapter);
 
+        db = FirebaseFirestore.getInstance();
 
         viewMarkersRecyclerAdapter = new ViewMarkersRecyclerAdapter(getApplicationContext(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -83,6 +92,12 @@ public class CreateMapActivity extends AppCompatActivity {
         layoutManager.setStackFromEnd(true);
         recyclerViewPlaces.setLayoutManager(layoutManager);
         recyclerViewPlaces.setAdapter(viewMarkersRecyclerAdapter);
+
+        isEdit = getIntent().getStringExtra("isEdit");
+        if (isEdit != null){
+            fillFields(isEdit);
+        }
+
 
         ///////FAB CODE///////
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -134,6 +149,7 @@ public class CreateMapActivity extends AppCompatActivity {
         });
         //END OF FAB
     }
+
     //FAB FUNCTIONS
     public void FABSHOW(final FloatingActionButton fabA, final FloatingActionButton fabB, final FloatingActionButton fabC){
         //Buttons Originally Hidden behind main FAB. Moves them to positions, and sets clickable and show
@@ -183,48 +199,133 @@ public class CreateMapActivity extends AppCompatActivity {
     void addMarker() {
         Intent CreateNewMarker = new Intent();
         CreateNewMarker.setClass(CreateMapActivity.this, CreateAndEditMarkerActivity.class);
-       // MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, null, null, null, null);
         startActivityForResult(CreateNewMarker, 1);
-        //viewMarkersRecyclerAdapter.addMarker(newMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
 
     }
+
+    private void fillFields(final String documentKey) {
+
+        pageHeading.setText("Edit Your Map");
+
+        db.collection("createdMaps").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                editMap = documentSnapshot.toObject(Map.class);
+                etMapTitle.setText(editMap.getTitle());
+                etMapDesc.setText(editMap.getDescription());
+                spPrivacy.setSelection(editMap.getPrivacy());
+
+                List<MyMarker> myMarkers = editMap.getMyMarkers();
+                for (int i = 0; i < myMarkers.size(); i++) {
+                    viewMarkersRecyclerAdapter.addMarker(myMarkers.get(i), String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
+                }
+
+            }}).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(CreateMapActivity.this, "Map Edit Error",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        }
 
 
     @OnClick(R.id.btn_create_map)
     void createMapClick() {
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         List<MyMarker> myMarkers = viewMarkersRecyclerAdapter.getMyMarkerList();
 
-        String titleEntered = etMapTitle.getText().toString();
+        final String titleEntered = etMapTitle.getText().toString();
         String descEntered = etMapDesc.getText().toString();
 
         Date currentTime = Calendar.getInstance().getTime();
 
-        Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered);
+        List<String> subscribers = new ArrayList<>();
+        if (editMap != null) {
+            subscribers = editMap.getSubscribers();
+        }
+
+
+        final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers);
 
         final String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + titleEntered.replace(" ", "_");
 
-        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User newUser = documentSnapshot.toObject(User.class);
+        if (isEdit == null) {
+            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User newUser = documentSnapshot.toObject(User.class);
 
-                List<String> currMaps = newUser.getCreatedMaps();
-                currMaps.add(mapKey);
+                    List<String> currMaps = newUser.getCreatedMaps();
 
-                newUser.setCreatedMaps(currMaps);
+                    currMaps.add(mapKey);
 
-                db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
+                    newUser.setCreatedMaps(currMaps);
 
-                //db.collection("users").document(newUser.getUID()).set(newUser);
+                    db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
 
-            }
-        });
+                }
+            });
 
-        db.collection("createdMaps").document(mapKey).set(newMap);
+            db.collection("createdMaps").document(mapKey).set(newMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    finish();
+                }
+            });
 
+
+        }
+        else { //When doing an edited Map
+
+            showProgressDialog();
+            final String oldMapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + editMap.getTitle().replace(" ", "_");
+
+            newMap.setSubscribers(editMap.getSubscribers());
+
+            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User newUser = documentSnapshot.toObject(User.class);
+
+                    List<String> currMaps = newUser.getCreatedMaps();
+
+                    currMaps.remove(oldMapKey);
+                    currMaps.add(mapKey);
+
+                    newUser.setCreatedMaps(currMaps);
+
+                    db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
+
+                    editSubs(oldMapKey, newMap, mapKey);
+                    db.collection("createdMaps").document(oldMapKey).delete();
+                    db.collection("createdMaps").document(mapKey).set(newMap);
+                }
+            }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    hideProgressDialog();
+                    finish();
+
+                }
+            });
+        }
+    }
+
+    private void editSubs(final String originalKey, final Map newMap, final String newMapKey) {
+        final List<String> subscribers = newMap.getSubscribers();
+
+        for (int i = 0; i < subscribers.size(); i++) {
+            final int finalI = i;
+            db.collection("users").document(subscribers.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User u = documentSnapshot.toObject(User.class);
+                    u.getSubMaps().remove(originalKey);
+                    u.getSubMaps().add(newMapKey);
+                    db.collection("users").document(subscribers.get(finalI)).update("subMaps", u.getSubMaps());
+                }
+            });
+        }
 
     }
 
@@ -237,6 +338,21 @@ public class CreateMapActivity extends AppCompatActivity {
                 MyMarker myMarker = (MyMarker) data.getExtras().getSerializable("NewMarker");
                 viewMarkersRecyclerAdapter.addMarker(myMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
             }
+        }
+    }
+
+    public void showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Editing Map...");
+        }
+
+        progressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
         }
     }
 

@@ -17,4 +17,6 @@
     <string name="create">Create</string>
     <string name="number_created">Maps Created</string>
     <string name="maps_followed">Maps Followed</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

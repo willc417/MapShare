@@ -85,6 +85,22 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+        MyMarker editMarker = (MyMarker) getIntent().getSerializableExtra("isEdit");
+        if (editMarker != null) {
+            fillMarkerFields(editMarker);
+        }
+
+
+    }
+
+    private void fillMarkerFields(MyMarker editMarker) {
+        etMarkerLat.setText(String.valueOf(editMarker.getLat()));
+        etMarkerLon.setText(String.valueOf(editMarker.getLon()));
+
+        etMarkerTitle.setText(editMarker.getTitle());
+        etMarkerDesc.setText(editMarker.getTitle());
+
+
     }
 
     @OnClick(R.id.searchBtn)
