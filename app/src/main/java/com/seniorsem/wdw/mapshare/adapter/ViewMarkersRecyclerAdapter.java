@@ -47,8 +47,7 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.tvTitle.setText(context.getString(R.string.title,
-                myMarkerList.get(holder.getAdapterPosition()).getTitle()));
+        holder.tvTitle.setText(myMarkerList.get(holder.getAdapterPosition()).getTitle());
         holder.tvDescription.setText(
                 myMarkerList.get(holder.getAdapterPosition()).getDescription());
         holder.tvLon.setText(String.valueOf(
