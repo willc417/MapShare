@@ -233,7 +233,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Map displayMap = documentSnapshot.toObject(Map.class);
                             List<MyMarker> myMarkers = displayMap.getMyMarkers();
                             for (int j = 0; j < myMarkers.size(); j++) {
-                                googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+                                MyMarker curr = myMarkers.get(j);
+                                googleMap.addMarker(new MarkerOptions().position(new LatLng(curr.getLat(), curr.getLon())).title(curr.getTitle()).snippet(curr.getDescription()));
                             }
                         }
                     });

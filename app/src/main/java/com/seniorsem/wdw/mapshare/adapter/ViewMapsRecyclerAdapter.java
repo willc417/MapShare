@@ -66,8 +66,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         holder.tvTitle.setText(mapList.get(holder.getAdapterPosition()).getTitle());
         holder.tvDescription.setText(
                 mapList.get(holder.getAdapterPosition()).getDescription());
-        holder.date.setText(context.getString(R.string.date,
-                mapList.get(holder.getAdapterPosition()).getDate()));
+        holder.date.setText(mapList.get(holder.getAdapterPosition()).getDate());
 
         setAnimation(holder.itemView, position);
 
