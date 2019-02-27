@@ -12,11 +12,13 @@ public class Map {
     private String Title;
     private String Description;
     private List<String> Subscribers;
+    private Float MapColor;
 
     public Map() {
     }
 
-    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description, List<String> subscribers) {
+
+    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description, List<String> subscribers, Float mapColor) {
 
         this.CreaterUID = createrUID;
         this.MyMarkers = markers;
@@ -26,6 +28,15 @@ public class Map {
         this.Title = title;
         this.Description = description;
         this.Subscribers = subscribers;
+        this.MapColor = mapColor;
+    }
+
+    public Float getMapColor() {
+        return MapColor;
+    }
+
+    public void setMapColor(Float mapColor) {
+        MapColor = mapColor;
     }
 
     public String getDescription() {
