@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,6 +51,7 @@ public class CreateMapActivity extends AppCompatActivity {
     String isEdit;
     private ProgressDialog progressDialog;
 
+    HashMap<String, Float> colorToFloat = new HashMap<>();
 
 
     @BindView(R.id.create_map_title)
@@ -62,10 +64,14 @@ public class CreateMapActivity extends AppCompatActivity {
     Button btnCreateMap;
     @BindView(R.id.privacy_sp)
     Spinner spPrivacy;
+    @BindView(R.id.mapColor_sp)
+    Spinner spMapColor;
 
 
     FirebaseFirestore db;
     int spinner_position;
+    int MCspinner_position;
+    ArrayAdapter<CharSequence> MCspinnerAdapter;
     private ViewMarkersRecyclerAdapter viewMarkersRecyclerAdapter;
 
 
@@ -75,10 +81,31 @@ public class CreateMapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_map);
         ButterKnife.bind(this);
 
+
+        //TEMP CODE FOR COLOR SPINNER
+        colorToFloat.put("Red", (float) 0.0);
+        colorToFloat.put("Azure", (float) 210.0);
+        colorToFloat.put("Blue", (float) 240.0);
+        colorToFloat.put("Cyan", (float) 180.0);
+        colorToFloat.put("Green", (float) 120.0);
+        colorToFloat.put("Magenta", (float) 300.0);
+        colorToFloat.put("Orange", (float) 30.0);
+        colorToFloat.put("Violet", (float) 270.0);
+        colorToFloat.put("Rose", (float) 330.0);
+        colorToFloat.put("Yellow", (float) 60.0);
+        //TEMP CODE FOR COLOR SPINNER
+
+
+
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.privacy_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spPrivacy.setAdapter(spinnerAdapter);
+
+        MCspinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.mapColor_array, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spMapColor.setAdapter(MCspinnerAdapter);
 
         db = FirebaseFirestore.getInstance();
 
@@ -94,7 +121,7 @@ public class CreateMapActivity extends AppCompatActivity {
         recyclerViewPlaces.setAdapter(viewMarkersRecyclerAdapter);
 
         isEdit = getIntent().getStringExtra("isEdit");
-        if (isEdit != null){
+        if (isEdit != null) {
             fillFields(isEdit);
         }
 
@@ -112,46 +139,46 @@ public class CreateMapActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Shows menu FABs
-                FABSHOW(fabHome,fab2,fab3);
+                FABSHOW(fabHome, fab2, fab3);
                 fab.hide();
                 fab.setClickable(false);
                 fabHide.show();
                 fabHide.setClickable(true);
             }
         });
-        fabHide.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fabHide.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 //Hides menu FABs
-                FABHIDE(fabHome,fab2,fab3);
+                FABHIDE(fabHome, fab2, fab3);
                 fab.show();
                 fab.setClickable(true);
                 fabHide.hide();
                 fabHide.setClickable(false);
             }
         });
-        fabHome.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fabHome.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(CreateMapActivity.this, MapsActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
-        fab2.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Toast.makeText(CreateMapActivity.this, "FAB2 Test", Toast.LENGTH_LONG).show();
             }
         });
-        fab3.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
-                Toast.makeText(CreateMapActivity.this,"FAB3 Test", Toast.LENGTH_LONG).show();
+        fab3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Toast.makeText(CreateMapActivity.this, "FAB3 Test", Toast.LENGTH_LONG).show();
             }
         });
         //END OF FAB
     }
 
     //FAB FUNCTIONS
-    public void FABSHOW(final FloatingActionButton fabA, final FloatingActionButton fabB, final FloatingActionButton fabC){
+    public void FABSHOW(final FloatingActionButton fabA, final FloatingActionButton fabB, final FloatingActionButton fabC) {
         //Buttons Originally Hidden behind main FAB. Moves them to positions, and sets clickable and show
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fabA.getLayoutParams();
         layoutParams.bottomMargin += (int) (fabA.getHeight() * 1.5);
@@ -169,7 +196,8 @@ public class CreateMapActivity extends AppCompatActivity {
         fabC.setClickable(true);
         fabC.show();
     }
-    public void FABHIDE(final FloatingActionButton fabA, final FloatingActionButton fabB, final FloatingActionButton fabC){
+
+    public void FABHIDE(final FloatingActionButton fabA, final FloatingActionButton fabB, final FloatingActionButton fabC) {
         //Moves new FABs behind main FAB. Not clickable or shown
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) fabA.getLayoutParams();
         layoutParams.bottomMargin -= (int) (fabA.getHeight() * 1.5);
@@ -192,6 +220,11 @@ public class CreateMapActivity extends AppCompatActivity {
     @OnItemSelected(R.id.privacy_sp)
     public void spinnerItemSelected(Spinner spinner, int position) {
         spinner_position = position;
+    }
+
+    @OnItemSelected(R.id.mapColor_sp)
+    public void mapColorspinnerItemSelected(Spinner spinner, int position) {
+        MCspinner_position = position;
     }
 
 
@@ -220,14 +253,15 @@ public class CreateMapActivity extends AppCompatActivity {
                     viewMarkersRecyclerAdapter.addMarker(myMarkers.get(i), String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
                 }
 
-            }}).addOnFailureListener(new OnFailureListener() {
+            }
+        }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(CreateMapActivity.this, "Map Edit Error",
                         Toast.LENGTH_SHORT).show();
             }
         });
-        }
+    }
 
 
     @OnClick(R.id.btn_create_map)
@@ -244,8 +278,9 @@ public class CreateMapActivity extends AppCompatActivity {
             subscribers = editMap.getSubscribers();
         }
 
+        Float mapColor = colorToFloat.get(String.valueOf(MCspinnerAdapter.getItem(MCspinner_position)));
 
-        final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers);
+        final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers, mapColor);
 
         final String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + titleEntered.replace(" ", "_");
 
@@ -274,8 +309,7 @@ public class CreateMapActivity extends AppCompatActivity {
             });
 
 
-        }
-        else { //When doing an edited Map
+        } else { //When doing an edited Map
 
             showProgressDialog();
             final String oldMapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + editMap.getTitle().replace(" ", "_");
@@ -333,7 +367,7 @@ public class CreateMapActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK) {
                 Log.d("TAG_UI", "onActivityResult");
                 MyMarker myMarker = (MyMarker) data.getExtras().getSerializable("NewMarker");
                 viewMarkersRecyclerAdapter.addMarker(myMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));

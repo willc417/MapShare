@@ -54,6 +54,11 @@
 
             </android.support.v7.widget.RecyclerView>
 
+            <Spinner
+                android:id="@+id/mapColor_sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <Button
                 android:id="@+id/btn_add_marker"
                 android:layout_width="wrap_content"
