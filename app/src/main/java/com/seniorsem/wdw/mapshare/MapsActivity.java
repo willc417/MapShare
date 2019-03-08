@@ -111,7 +111,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fab3.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 Intent intentMain = new Intent();
-                intentMain.setClass(MapsActivity.this, FindFriendsActivity.class);
+                intentMain.setClass(MapsActivity.this, ProfileActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
