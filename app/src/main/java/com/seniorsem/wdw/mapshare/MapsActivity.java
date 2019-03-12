@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
@@ -41,6 +40,7 @@ import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 import com.seniorsem.wdw.mapshare.data.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
@@ -75,15 +75,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 //Shows menu FABs
-                FABSHOW(fab1,fab2,fab3);
+                FABSHOW(fab1, fab2, fab3);
                 fab.hide();
                 fab.setClickable(false);
                 fabHide.show();
                 fabHide.setClickable(true);
             }
         });
-        fabHide.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fabHide.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 //Hides Menu FABs
                 FABHIDE(fab1, fab2, fab3);
                 fab.show();
@@ -92,24 +92,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 fabHide.setClickable(false);
             }
         });
-        fab1.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, CreateMapActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
-        fab2.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, ViewMapsActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
-        fab3.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, ProfileActivity.class);
                 Log.d("TAG_UI", "HERE");
@@ -128,7 +128,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     //FAB FUNCTIONS
-    public void FABSHOW(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
+    public void FABSHOW(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc) {
         //Buttons Originally Hidden behind main FAB. Moves them to positions, and sets clickable and show
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
         layoutParams.bottomMargin += (int) (faba.getHeight() * 1.5);
@@ -148,18 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-        /*
-        Button btn = (Button)findViewById(R.id.temp_button);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MapsActivity.this, ProfileActivity.class));
-            }
-        });
-        */
-
-    public void FABHIDE(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
+    public void FABHIDE(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc) {
         //Moves new FABs behind main FAB. Not clickable or shown
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
         layoutParams.bottomMargin -= (int) (faba.getHeight() * 1.5);
@@ -186,8 +175,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         googleMap.clear();
 
-        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
 
@@ -204,8 +193,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         final double longitude = location.getLongitude();
         final double latitude = location.getLatitude();
-
-
 
 
         LatLng player = new LatLng(latitude, longitude);
@@ -248,14 +235,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                    if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
+                if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
                     Toast.makeText(MapsActivity.this, "Marker Click Test", Toast.LENGTH_LONG).show();
+                    String info = marker.getSnippet();
 
-                    Intent ViewNearbyMarker = new Intent();
-                    ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
-                    startActivity(ViewNearbyMarker);
-                }
-                else {
+                    if (info != null) {
+                        String[] splitSnippet = info.split("\n");
+                        String mapName = splitSnippet[2].split(": ")[1] + "_" + splitSnippet[0].split(": ")[1].replace(" ", "_");
+                        int markerNum = Integer.valueOf(splitSnippet[3].split("# ")[1]);
+
+                        Bundle extras = new Bundle();
+                        extras.putInt("MarkerIndex", markerNum);
+                        extras.putString("MapName", mapName);
+
+                        Intent ViewNearbyMarker = new Intent();
+                        ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
+                        ViewNearbyMarker.putExtras(extras);
+                        startActivity(ViewNearbyMarker);
+                    }
+                } else {
                     Toast.makeText(MapsActivity.this, "Move closer to unlock content", Toast.LENGTH_LONG).show();
                 }
                 return false;
@@ -286,8 +284,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             for (int j = 0; j < myMarkers.size(); j++) {
                                 MyMarker curr = myMarkers.get(j);
                                 googleMap.addMarker(new MarkerOptions().position(new LatLng(curr.getLat(), curr.getLon())).title(curr.getTitle())
-                                        .snippet(curr.getDescription() + "\nCreator: " + displayMap.getCreaterUID())
-                                .icon(BitmapDescriptorFactory.defaultMarker(displayMap.getMapColor())));
+                                        .snippet("Map Name: " + displayMap.getTitle() + "\nDescription: " + curr.getDescription() + "\nCreator: " + displayMap.getCreaterUID() + "\nMarker # " + j)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(displayMap.getMapColor())));
                             }
                         }
                     });
