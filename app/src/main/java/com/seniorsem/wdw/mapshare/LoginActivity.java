@@ -3,6 +3,7 @@ package com.seniorsem.wdw.mapshare;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,9 +24,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.User;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+    private StorageReference storageRef;
 
 
     @Override
@@ -50,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
+        storageRef = FirebaseStorage.getInstance().getReference();
         ButterKnife.bind(this);
 
     }
@@ -120,8 +127,11 @@ public class LoginActivity extends AppCompatActivity {
                             List<String> subMaps = new ArrayList<>();
                             List<String> friends = new ArrayList<>();
 
+                            //set profile picture url
+                            String uri = "https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg";
+
                             User newUser = new User(
-                                    fbUser.getEmail(), createdMaps, subMaps, friends);
+                                    fbUser.getEmail(), createdMaps, subMaps, friends, uri);
 
                             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -134,11 +144,14 @@ public class LoginActivity extends AppCompatActivity {
                                     db.collection("users").document(fbUser.getEmail()).collection("createdMaps").document();
                                     db.collection("users").document(fbUser.getEmail()).collection("subMaps").document();
                                     db.collection("users").document(fbUser.getEmail()).collection("friends").document();
+                                    db.collection("users").document(fbUser.getEmail()).collection("profilePic").document();
                                 }
                             });
-                        } else {
-                            Toast.makeText(LoginActivity.this, task.getException().getLocalizedMessage(),
-                                    Toast.LENGTH_SHORT).show();
+
+
+                            //storageRef.putFile(uri);
+                            newUser.setProfilePicture(uri);
+
 
                         }
                     }

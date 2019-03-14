@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "868871296206-1045lhhnhntvdpoh3fc80cb8da5td7dg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seniorsem.wdw.mapshare",
+            "certificate_hash": "891134d2e0358005f33933f14f264d459d768084"
+          }
+        },
+        {
           "client_id": "868871296206-380icbjtqa7c4ekdip4i7r9eusk2kg0j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
