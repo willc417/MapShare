@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.List;
@@ -37,14 +36,15 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final int RESULT_LOAD_IMAGE = 1;
 
+    String documentKey;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
 
-
-        //get the created maps of a user
+        documentKey = getIntent().getStringExtra("username");
         getProfileInfo();
 
         tvChangeProfilePicture.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +62,11 @@ public class ProfileActivity extends AppCompatActivity {
     private void getProfileInfo() {
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        if (documentKey == null){
+            documentKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        }
+
+        db.collection("users").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currUser = documentSnapshot.toObject(User.class);

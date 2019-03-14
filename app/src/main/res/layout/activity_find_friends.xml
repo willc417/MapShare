@@ -5,18 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ViewNearbyMarkerActivity">
+    android:padding="20dp"
+    tools:context=".FindFriendsActivity">
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="default"
-        android:id="@+id/nearbyMarkerTitle"/>
+        android:id="@+id/etSearchUsername"
+        android:hint="Enter a friend's username"/>
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="default"
-        android:id="@+id/nearbyMarkerDesc"/>
+        android:id="@+id/searchFriendBtn"
+        android:text="Search"/>
 
 </LinearLayout>

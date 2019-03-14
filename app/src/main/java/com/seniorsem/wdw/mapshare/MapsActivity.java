@@ -1,24 +1,26 @@
 package com.seniorsem.wdw.mapshare;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,27 +34,29 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 import com.seniorsem.wdw.mapshare.data.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
+    private static final Object FFFFFF = 2.35098856;
     private LocationManager locationManager;
     private float zoomLevel = 15.5f;
     private Context context;
+    SupportMapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         context = getApplicationContext();
         mapFragment.getMapAsync(this);
@@ -71,15 +75,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 //Shows menu FABs
-                FABSHOW(fab1,fab2,fab3);
+                FABSHOW(fab1, fab2, fab3);
                 fab.hide();
                 fab.setClickable(false);
                 fabHide.show();
                 fabHide.setClickable(true);
             }
         });
-        fabHide.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fabHide.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 //Hides Menu FABs
                 FABHIDE(fab1, fab2, fab3);
                 fab.show();
@@ -88,24 +92,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 fabHide.setClickable(false);
             }
         });
-        fab1.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab1.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, CreateMapActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
-        fab2.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab2.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, ViewMapsActivity.class);
                 Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
-        fab3.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View view){
+        fab3.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(MapsActivity.this, ProfileActivity.class);
                 Log.d("TAG_UI", "HERE");
@@ -113,8 +117,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mapFragment.getMapAsync(this);
+
+    }
+
+
     //FAB FUNCTIONS
-    public void FABSHOW(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
+    public void FABSHOW(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc) {
         //Buttons Originally Hidden behind main FAB. Moves them to positions, and sets clickable and show
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
         layoutParams.bottomMargin += (int) (faba.getHeight() * 1.5);
@@ -134,18 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-        /*
-        Button btn = (Button)findViewById(R.id.temp_button);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MapsActivity.this, ProfileActivity.class));
-            }
-        });
-        */
-
-    public void FABHIDE(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc){
+    public void FABHIDE(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc) {
         //Moves new FABs behind main FAB. Not clickable or shown
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) faba.getLayoutParams();
         layoutParams.bottomMargin -= (int) (faba.getHeight() * 1.5);
@@ -170,8 +173,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        googleMap.clear();
+
+        if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
 
@@ -190,25 +195,65 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final double latitude = location.getLatitude();
 
 
-
-
         LatLng player = new LatLng(latitude, longitude);
-        googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker"));
+        googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker").icon(BitmapDescriptorFactory.defaultMarker(240)));
+
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
         AddMarkers(googleMap);
 
+        googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+            @Override
+            public View getInfoWindow(Marker arg0) {
+                return null;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+
+                LinearLayout info = new LinearLayout(context);
+                info.setOrientation(LinearLayout.VERTICAL);
+
+                TextView title = new TextView(context);
+                title.setTextColor(Color.BLACK);
+                title.setGravity(Gravity.CENTER);
+                title.setTypeface(null, Typeface.BOLD);
+                title.setText(marker.getTitle());
+
+                TextView snippet = new TextView(context);
+                snippet.setTextColor(Color.GRAY);
+                snippet.setText(marker.getSnippet());
+
+                info.addView(title);
+                info.addView(snippet);
+
+                return info;
+            }
+        });
+
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                    if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
+                if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
                     Toast.makeText(MapsActivity.this, "Marker Click Test", Toast.LENGTH_LONG).show();
+                    String info = marker.getSnippet();
 
-                    Intent ViewNearbyMarker = new Intent();
-                    ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
-                    startActivity(ViewNearbyMarker);
-                }
-                else {
+                    if (info != null) {
+                        String[] splitSnippet = info.split("\n");
+                        String mapName = splitSnippet[2].split(": ")[1] + "_" + splitSnippet[0].split(": ")[1].replace(" ", "_");
+                        int markerNum = Integer.valueOf(splitSnippet[3].split("# ")[1]);
+
+                        Bundle extras = new Bundle();
+                        extras.putInt("MarkerIndex", markerNum);
+                        extras.putString("MapName", mapName);
+
+                        Intent ViewNearbyMarker = new Intent();
+                        ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
+                        ViewNearbyMarker.putExtras(extras);
+                        startActivity(ViewNearbyMarker);
+                    }
+                } else {
                     Toast.makeText(MapsActivity.this, "Move closer to unlock content", Toast.LENGTH_LONG).show();
                 }
                 return false;
@@ -237,7 +282,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             Map displayMap = documentSnapshot.toObject(Map.class);
                             List<MyMarker> myMarkers = displayMap.getMyMarkers();
                             for (int j = 0; j < myMarkers.size(); j++) {
-                                googleMap.addMarker(new MarkerOptions().position(new LatLng(myMarkers.get(j).getLat(), myMarkers.get(j).getLon())).title("TEST"));
+                                MyMarker curr = myMarkers.get(j);
+                                googleMap.addMarker(new MarkerOptions().position(new LatLng(curr.getLat(), curr.getLon())).title(curr.getTitle())
+                                        .snippet("Map Name: " + displayMap.getTitle() + "\nDescription: " + curr.getDescription() + "\nCreator: " + displayMap.getCreaterUID() + "\nMarker # " + j)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(displayMap.getMapColor())));
                             }
                         }
                     });

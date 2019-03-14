@@ -2,6 +2,7 @@ package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +11,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.seniorsem.wdw.mapshare.CreateAndEditMarkerActivity;
 import com.seniorsem.wdw.mapshare.R;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 
@@ -44,8 +47,7 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
     @SuppressLint("StringFormatInvalid")
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.tvTitle.setText(context.getString(R.string.title,
-                myMarkerList.get(holder.getAdapterPosition()).getTitle()));
+        holder.tvTitle.setText(myMarkerList.get(holder.getAdapterPosition()).getTitle());
         holder.tvDescription.setText(
                 myMarkerList.get(holder.getAdapterPosition()).getDescription());
         holder.tvLon.setText(String.valueOf(
@@ -55,16 +57,22 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
 
         setAnimation(holder.itemView, position);
 
-        /*if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(postList.get(holder.getAdapterPosition()).getUid())) {
-            holder.btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    removePost(holder.getAdapterPosition());
-                }
-            });
-        } else {
-            holder.btnDelete.setVisibility(View.GONE);
-        }*/
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent EditIntent = new Intent();
+                EditIntent.setClass(context, CreateAndEditMarkerActivity.class);
+                EditIntent.putExtra("isEdit", getMyMarker(holder.getAdapterPosition()));
+                context.startActivity(EditIntent);
+            }
+        });
+
+        holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeMarker(holder.getAdapterPosition());
+            }
+        });
 
       /*  if(!TextUtils.isEmpty(postList.get(holder.getAdapterPosition()).
 
@@ -84,6 +92,12 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         setAnimation(holder.itemView, position);
     }
 
+    public void removeMarker(int index){
+        Toast.makeText(context, "Remove Marker", Toast.LENGTH_SHORT).show();
+        myMarkerList.remove(index);
+        myMarkerKeys.remove(index);
+        notifyItemRemoved(index);
+    }
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
@@ -94,6 +108,9 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         }
     }
 
+    public MyMarker getMyMarker(int position) {
+        return myMarkerList.get(position);
+    }
 
     public List<MyMarker> getMyMarkerList() {
         return myMarkerList;
@@ -116,6 +133,8 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         public TextView tvDescription;
         public TextView tvLon;
         public TextView tvLat;
+        public at.markushi.ui.CircleButton btnDelete;
+        public at.markushi.ui.CircleButton btnEdit;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -123,6 +142,8 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvLon = itemView.findViewById(R.id.tvLon);
             tvLat = itemView.findViewById(R.id.tvLat);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
         }
     }
 

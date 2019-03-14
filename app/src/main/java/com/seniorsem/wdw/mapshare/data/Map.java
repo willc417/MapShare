@@ -1,23 +1,24 @@
 package com.seniorsem.wdw.mapshare.data;
 
-import android.location.LocationListener;
-import android.location.LocationManager;
-
 import java.util.List;
 
 public class Map {
 
     private String CreaterUID;
-    private List<MyMarker>MyMarkers;
+    private List<MyMarker> MyMarkers;
     private String Date;
     private int NumSubs;
     private int Privacy;
     private String Title;
     private String Description;
+    private List<String> Subscribers;
+    private Float MapColor;
 
-    public Map() {}
+    public Map() {
+    }
 
-    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description) {
+
+    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description, List<String> subscribers, Float mapColor) {
 
         this.CreaterUID = createrUID;
         this.MyMarkers = markers;
@@ -26,10 +27,28 @@ public class Map {
         this.Privacy = privacy;
         this.Title = title;
         this.Description = description;
+        this.Subscribers = subscribers;
+        this.MapColor = mapColor;
+    }
+
+    public Float getMapColor() {
+        return MapColor;
+    }
+
+    public void setMapColor(Float mapColor) {
+        MapColor = mapColor;
     }
 
     public String getDescription() {
         return Description;
+    }
+
+    public List<String> getSubscribers() {
+        return Subscribers;
+    }
+
+    public void setSubscribers(List<String> subscribers) {
+        Subscribers = subscribers;
     }
 
     public void setDescription(String description) {

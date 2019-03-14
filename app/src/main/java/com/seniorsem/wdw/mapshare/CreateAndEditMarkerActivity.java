@@ -73,7 +73,6 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     TextView tvNearbyAddress;
 
 
-
     int choice = 1;
 
     @Override
@@ -84,6 +83,22 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
         currLocLayout.setVisibility(View.VISIBLE);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        MyMarker editMarker = (MyMarker) getIntent().getSerializableExtra("isEdit");
+        if (editMarker != null) {
+            fillMarkerFields(editMarker);
+        }
+
+
+    }
+
+    private void fillMarkerFields(MyMarker editMarker) {
+        etMarkerLat.setText(String.valueOf(editMarker.getLat()));
+        etMarkerLon.setText(String.valueOf(editMarker.getLon()));
+
+        etMarkerTitle.setText(editMarker.getTitle());
+        etMarkerDesc.setText(editMarker.getTitle());
+
 
     }
 
@@ -108,8 +123,8 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     @OnClick(R.id.getCurrLocBtn)
     void SetCurrLoc() {
 
-        if (ActivityCompat.checkSelfPermission(CreateAndEditMarkerActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(CreateAndEditMarkerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        if (ActivityCompat.checkSelfPermission(CreateAndEditMarkerActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(CreateAndEditMarkerActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -157,27 +172,21 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
         if (choice == 0) { //search location
             LatEntered = 0.0;
             LonEntered = 0.0;
-        }
-        else if (choice == 1) { //currLocation
+        } else if (choice == 1) { //currLocation
             LatEntered = Double.parseDouble(tvCurrLat.getText().toString());
             LonEntered = Double.parseDouble(tvCurrLon.getText().toString());
-        }
-        else { //coordinates btn
+        } else { //coordinates btn
             LatEntered = Double.parseDouble(etMarkerLat.getText().toString());
             LonEntered = Double.parseDouble(etMarkerLon.getText().toString());
         }
 
 
-
         MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, null, null, null, null);
-
         Intent resultIntent = new Intent();
         resultIntent.putExtra("NewMarker", (Serializable) newMarker);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
-
-
 
 
 }
