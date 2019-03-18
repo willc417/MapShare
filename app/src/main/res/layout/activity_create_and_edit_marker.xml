@@ -120,6 +120,14 @@
 
     </RelativeLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Coordinates"
+        android:id="@+id/saveCbtn"
+        android:layout_below="@id/currLocLayout"
+        android:layout_alignParentEnd="true"/>
+
 
     <EditText
         android:id="@+id/markerTitle"
@@ -138,11 +146,26 @@
 
         android:hint="marker desc" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Latitude"
+        android:layout_below="@+id/markerDesc"
+        android:id="@+id/tvSavedLat"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Longitude"
+        android:layout_below="@+id/tvSavedLat"
+        android:id="@+id/tvSavedLon"/>
+
     <Button
         android:id="@+id/CreateBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+
         android:layout_alignParentBottom="true"
         android:text="@string/create" />
 
