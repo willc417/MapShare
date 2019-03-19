@@ -97,6 +97,8 @@ public class CreateMapActivity extends AppCompatActivity {
 
 
 
+
+
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.privacy_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -252,7 +254,7 @@ public class CreateMapActivity extends AppCompatActivity {
                 for (int i = 0; i < myMarkers.size(); i++) {
                     viewMarkersRecyclerAdapter.addMarker(myMarkers.get(i), String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
                 }
-
+                spMapColor.setSelection(editMap.getMapColorSpinnerIndex());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -280,7 +282,7 @@ public class CreateMapActivity extends AppCompatActivity {
 
         Float mapColor = colorToFloat.get(String.valueOf(MCspinnerAdapter.getItem(MCspinner_position)));
 
-        final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers, mapColor);
+        final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers, mapColor, MCspinner_position);
 
         final String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + titleEntered.replace(" ", "_");
 

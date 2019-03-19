@@ -7,35 +7,55 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
     android:padding="20dp"
+    android:background="@color/colorPrimary"
     android:id="@+id/linear_login"
     >
 
     <TextView
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/mapshare"
         android:textSize="40sp"
+        android:textColor="@color/textColorPrimary"
         android:layout_marginTop="100dp"
         android:layout_gravity="center"
         />
 
-    <EditText
-        android:id="@+id/username_edit"
+    <android.support.design.widget.TextInputLayout
+        android:textColorHint="@color/textColorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
-        android:hint="@string/username"
-        android:text="password3@gmail.com"/>
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp">
 
+        <EditText
+            android:textColor="@color/textColorPrimary"
+            android:id="@+id/username_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="@string/username"
+            android:text="password3@gmail.com" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:textColorHint="@color/textColorPrimary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp">
     <EditText
         android:id="@+id/password_edit"
+        android:textColor="@color/textColorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
         android:inputType="textPassword"
         android:hint="@string/password"
         android:text="password3"/>
+
+    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_marginTop="50dp"
@@ -59,14 +79,5 @@
             android:layout_weight="100"
             android:text="@string/log_in"/>
 
-
     </LinearLayout>
-
-
-
-
-
-
-
-
 </LinearLayout>

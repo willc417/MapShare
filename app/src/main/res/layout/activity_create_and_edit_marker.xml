@@ -8,157 +8,175 @@
     android:padding="20dp"
     tools:context=".CreateAndEditMarkerActivity">
 
-    <LinearLayout
-        android:id="@+id/btnLayout"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputLayoutTitle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <EditText
+            android:id="@+id/markerTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name_this_marker"
+            android:inputType="text" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/inputLayoutDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputLayoutTitle">
+
+        <EditText
+            android:id="@+id/markerDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_a_description"
+            android:inputType="textLongMessage" />
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:paddingTop="10dp"
+        android:id="@+id/btnLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/inputLayoutDesc"
         android:layout_centerHorizontal="true"
         android:weightSum="60">
 
         <at.markushi.ui.CircleButton
             android:id="@+id/searchBtn"
-            app:cb_color="#FFFFFF"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="20"
-            android:src="@drawable/search" />
+            android:src="@drawable/search"
+            app:cb_color="#FFFFFF" />
 
         <at.markushi.ui.CircleButton
             android:id="@+id/coordinatesBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="20"
-            app:cb_color="#FFFFFF"
             android:src="@drawable/lat_lon_globe"
-            />
+            app:cb_color="#FFFFFF" />
 
         <at.markushi.ui.CircleButton
             android:id="@+id/currLocBtn"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            app:cb_color="#FFFFFF"
             android:layout_weight="20"
             android:src="@drawable/current_location"
-            />
+            app:cb_color="#FFFFFF" />
 
     </LinearLayout>
 
     <RelativeLayout
+        android:paddingTop="10dp"
         android:id="@+id/searchLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnLayout"
         android:visibility="invisible">
 
-        <EditText
-            android:id="@+id/etSearch"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/etSearchTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/type_in_address" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/saveCbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Type in Address" />
-
+            android:layout_below="@id/etSearchTextInputLayout"
+            android:layout_alignParentEnd="true"
+            android:text="Save Coordinates" />
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:paddingTop="10dp"
         android:id="@+id/coordinatesLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnLayout"
         android:visibility="invisible">
 
-        <EditText
-            android:id="@+id/markerLon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="marker Lon" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/lonTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/markerLat"
-            android:layout_below="@+id/markerLon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="marker Lat" />
+            <EditText
+                android:id="@+id/markerLon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Longitude:" />
+        </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/latTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lonTextInputLayout">
+
+            <EditText
+                android:id="@+id/markerLat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/markerLon"
+                android:hint="Latitude:" />
+        </android.support.design.widget.TextInputLayout>
     </RelativeLayout>
 
     <RelativeLayout
+        android:paddingTop="10dp"
         android:id="@+id/currLocLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/btnLayout"
+        android:layout_centerHorizontal="true"
         android:visibility="invisible">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/currLat"
-            android:text="Push Button for Current Lat"
-            android:layout_alignParentStart="true"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/currLon"
-            android:text="Push Button for Current Lon"
-            android:layout_toRightOf="@+id/currLat"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/nearbyAddress"
-            android:layout_below="@+id/currLat"/>
-
         <Button
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/currLat"
             android:id="@+id/getCurrLocBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get Current Location" />
+            android:layout_centerHorizontal="true"
+            android:text="@string/get_current_location" />
 
-
+        <TextView
+            android:id="@+id/nearbyAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/getCurrLocBtn" />
 
     </RelativeLayout>
 
-    <Button
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/tvSavedLat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Coordinates"
-        android:id="@+id/saveCbtn"
-        android:layout_below="@id/currLocLayout"
-        android:layout_alignParentEnd="true"/>
-
-
-    <EditText
-        android:id="@+id/markerTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:hint="marker title" />
-
-    <EditText
-        android:id="@+id/markerDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/markerTitle"
-        android:layout_centerHorizontal="true"
-
-        android:hint="marker desc" />
+        android:layout_above="@id/tvSavedLon"
+        android:layout_alignParentStart="true"
+        android:text="@string/lat_with_param" />
 
     <TextView
+        android:visibility="invisible"
+        android:id="@+id/tvSavedLon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Latitude"
-        android:layout_below="@+id/markerDesc"
-        android:id="@+id/tvSavedLat"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Longitude"
-        android:layout_below="@+id/tvSavedLat"
-        android:id="@+id/tvSavedLon"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/lon_with_param" />
 
     <Button
         android:id="@+id/CreateBtn"

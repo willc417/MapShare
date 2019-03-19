@@ -22,5 +22,11 @@
 
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="enter_a_description">Enter a description!</string>
+    <string name="name_this_marker">Name this marker!</string>
+    <string name="lat_with_param">Latitude: %1$f</string>
+    <string name="lon_with_param">Longitude: %1$f</string>
+    <string name="get_current_location">Get Current Location</string>
+    <string name="type_in_address">Type in Address</string>
 
 </resources>

@@ -73,10 +73,6 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
     @BindView(R.id.getCurrLocBtn)
     Button getCurrLocBtn;
-    @BindView(R.id.currLat)
-    TextView tvCurrLat;
-    @BindView(R.id.currLon)
-    TextView tvCurrLon;
     @BindView(R.id.nearbyAddress)
     TextView tvNearbyAddress;
 
@@ -142,16 +138,21 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
             return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        tvCurrLon.setText(String.valueOf(location.getLongitude()));
-        tvCurrLat.setText(String.valueOf(location.getLatitude()));
+        LatEntered = location.getLatitude();
+        LonEntered = location.getLongitude();
+        tvSavedLon.setText(getString(R.string.lat_with_param, LatEntered));
+        tvSavedLat.setText(getString(R.string.lon_with_param, LonEntered));
+        tvSavedLon.setVisibility(View.VISIBLE);
+        tvSavedLat.setVisibility(View.VISIBLE);
 
-        tvNearbyAddress.setText(geocodeFromCoordinates(Double.parseDouble(tvCurrLat.getText().toString()),
-                Double.parseDouble(tvCurrLon.getText().toString())));
+        tvNearbyAddress.setText(geocodeFromCoordinates(LatEntered, LonEntered));
 
     }
 
     @OnClick(R.id.coordinatesBtn)
     void ExpandCoordinates() {
+        tvSavedLon.setVisibility(View.INVISIBLE);
+        tvSavedLat.setVisibility(View.INVISIBLE);
         currLocLayout.setVisibility(View.INVISIBLE);
         coordinatesLayout.setVisibility(View.VISIBLE);
         searchLayout.setVisibility(View.INVISIBLE);
@@ -163,23 +164,16 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     @OnClick(R.id.saveCbtn)
     void SaveCoordinates() {
 
-        if (choice == 0) { //search location
             LatLng searchLatLng = geocodeFromAddress(etSearch.getText().toString());
             LatEntered = searchLatLng.latitude;
             LonEntered = searchLatLng.longitude;
-        } else if (choice == 1) { //currLocation
-            LatEntered = Double.parseDouble(tvCurrLat.getText().toString());
-            LonEntered = Double.parseDouble(tvCurrLon.getText().toString());
-        } else { //coordinates btn
-            LatEntered = Double.parseDouble(etMarkerLat.getText().toString());
-            LonEntered = Double.parseDouble(etMarkerLon.getText().toString());
-        }
 
         if (LatEntered != 86.0) {
-            tvSavedLat.setText(String.valueOf(LatEntered));
-            tvSavedLon.setText(String.valueOf(LonEntered));
+            tvSavedLon.setText(getString(R.string.lat_with_param, LatEntered));
+            tvSavedLat.setText(getString(R.string.lon_with_param, LonEntered));
+            tvSavedLon.setVisibility(View.VISIBLE);
+            tvSavedLat.setVisibility(View.VISIBLE);
         }
-
     }
 
 
@@ -228,12 +222,26 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
         String titleEntered = etMarkerTitle.getText().toString();
         String descEntered = etMarkerDesc.getText().toString();
 
+        if (choice == 1) { //currLocation
+        LatEntered = Double.parseDouble(tvSavedLat.getText().toString());
+        LonEntered = Double.parseDouble(tvSavedLon.getText().toString());
+        }
+        else if (choice == 2) { //coordinates btn
+        LatEntered = Double.parseDouble(etMarkerLat.getText().toString());
+        LonEntered = Double.parseDouble(etMarkerLon.getText().toString());
+        }
 
+        if ((LatEntered > 85.0 || LatEntered < -85.0) || (LonEntered > 180.0 || LonEntered < -180.0)) {
+            Toast.makeText(this, "Enter a valid location", Toast.LENGTH_SHORT).show();
+        }
+        else {
         MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, null, null, null, null);
         Intent resultIntent = new Intent();
         resultIntent.putExtra("NewMarker", newMarker);
         setResult(RESULT_OK, resultIntent);
         finish();
+        }
+
     }
 
 

@@ -13,12 +13,15 @@ public class Map {
     private String Description;
     private List<String> Subscribers;
     private Float MapColor;
+    private int MapColorSpinnerIndex;
+
 
     public Map() {
     }
 
 
-    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description, List<String> subscribers, Float mapColor) {
+    public Map(String createrUID, List<MyMarker> markers, String date, int numSubs, int privacy, String title, String description, List<String> subscribers, Float mapColor,
+               int MapColorSpinnerIndex) {
 
         this.CreaterUID = createrUID;
         this.MyMarkers = markers;
@@ -29,10 +32,19 @@ public class Map {
         this.Description = description;
         this.Subscribers = subscribers;
         this.MapColor = mapColor;
+        this.MapColorSpinnerIndex = MapColorSpinnerIndex;
     }
 
     public Float getMapColor() {
         return MapColor;
+    }
+
+    public int getMapColorSpinnerIndex() {
+        return MapColorSpinnerIndex;
+    }
+
+    public void setMapColorSpinnerIndex(int mapColorSpinnerIndex) {
+        MapColorSpinnerIndex = mapColorSpinnerIndex;
     }
 
     public void setMapColor(Float mapColor) {
