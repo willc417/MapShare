@@ -6,7 +6,14 @@
     android:id="@+id/activity_view_map"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:id="@+id/currUsername"/>
+
     <Button
+        android:layout_below="@+id/currUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Created Maps"

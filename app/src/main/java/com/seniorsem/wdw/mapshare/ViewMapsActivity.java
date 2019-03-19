@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +41,11 @@ public class ViewMapsActivity extends AppCompatActivity {
     Button btnSwitch;
     public boolean viewingCreated;
 
+    @BindView(R.id.currUsername)
+    TextView currUsername;
+
+    String documentKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +55,17 @@ public class ViewMapsActivity extends AppCompatActivity {
         viewingCreated = true;
         context = getApplicationContext();
         db = FirebaseFirestore.getInstance();
+        ButterKnife.bind(this);
+
+        documentKey = getIntent().getStringExtra("username");
+
+        if (documentKey == null) {
+            documentKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
+        }
+        else {
+        currUsername.setText(documentKey);
+        }
 
         viewMapsRecyclerAdapter = new ViewMapsRecyclerAdapter(getApplicationContext(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -184,7 +201,7 @@ public class ViewMapsActivity extends AppCompatActivity {
     }
 
     private void initPosts() {
-        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("users").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currUser = documentSnapshot.toObject(User.class);
