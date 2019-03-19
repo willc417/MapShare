@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -33,6 +35,10 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView ivProfilePic;
     @BindView(R.id.change_profile_picture)
     TextView tvChangeProfilePicture;
+    @BindView(R.id.viewMapsBtn)
+    Button viewMapsBtn;
+    @BindView(R.id.findFriendsBtn)
+    Button findFriendsBtn;
 
     private static final int RESULT_LOAD_IMAGE = 1;
 
@@ -64,6 +70,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (documentKey == null){
             documentKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            findFriendsBtn.setVisibility(View.VISIBLE);
         }
 
         db.collection("users").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -84,6 +91,25 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         }
+
+    @OnClick(R.id.viewMapsBtn)
+    void viewMaps() {
+        Intent ProfileIntent = new Intent();
+        ProfileIntent.setClass(ProfileActivity.this, ViewMapsActivity.class);
+        ProfileIntent.putExtra("username", documentKey);
+        startActivity(ProfileIntent);
+    }
+
+    @OnClick(R.id.findFriendsBtn)
+    void findFriends() {
+        Intent ProfileIntent = new Intent();
+        ProfileIntent.setClass(ProfileActivity.this, FindFriendsActivity.class);
+        ProfileIntent.putExtra("username", documentKey);
+        startActivity(ProfileIntent);
+    }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

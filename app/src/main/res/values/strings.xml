@@ -28,5 +28,7 @@
     <string name="lon_with_param">Longitude: %1$f</string>
     <string name="get_current_location">Get Current Location</string>
     <string name="type_in_address">Type in Address</string>
+    <string name="view_maps">View Maps</string>
+    <string name="find_friends">Find Friends</string>
 
 </resources>
