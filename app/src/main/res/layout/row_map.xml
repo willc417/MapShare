@@ -69,4 +69,11 @@
             android:layout_height="40dp"
             android:text="@string/delete" />
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:id="@+id/checkBox"/>
+
     </RelativeLayout></android.support.v7.widget.CardView>
