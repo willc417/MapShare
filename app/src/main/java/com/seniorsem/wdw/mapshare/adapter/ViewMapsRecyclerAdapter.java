@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +29,7 @@ import com.seniorsem.wdw.mapshare.data.Map;
 import com.seniorsem.wdw.mapshare.data.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecyclerAdapter.ViewHolder> {
@@ -67,11 +70,16 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         holder.tvDescription.setText(
                 mapList.get(holder.getAdapterPosition()).getDescription());
         holder.date.setText(mapList.get(holder.getAdapterPosition()).getDate());
+        holder.checkBox.setOnCheckedChangeListener(null);
+
+//        final String[] mapName = {holder.tvCreator.getText().toString() + "_" + holder.tvTitle.getText().toString().replace(" ", "_")};
 
         setAnimation(holder.itemView, position);
 
         if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(
                 mapList.get(holder.getAdapterPosition()).getCreaterUID())) {
+
+            holder.checkBox.setVisibility(View.GONE);
 
             holder.btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,28 +98,58 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
                     removeMap(holder.getAdapterPosition());
                 }
             });
+            //holder.subCheck.setVisibility(View.GONE);
         } else {
+
             holder.btnDelete.setVisibility(View.GONE);
             holder.btnEdit.setVisibility(View.GONE);
+            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User u = documentSnapshot.toObject(User.class);
+                    List<String> subMaps = u.getSubMaps();
+
+                    String mapName = holder.tvCreator.getText().toString() + "_" + holder.tvTitle.getText().toString().replace(" ", "_");
+
+                    if (subMaps.contains(mapName)) {
+                        holder.checkBox.setChecked(true);
+                    } else {
+                        holder.checkBox.setChecked(false);
+                    }
+                }
+            }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                        @Override
+                        public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    User u = documentSnapshot.toObject(User.class);
+                                    List<String> subMaps = u.getSubMaps();
+                                    String mapName = holder.tvCreator.getText().toString() + "_" + holder.tvTitle.getText().toString().replace(" ", "_");
+                                    
+                                    if (isChecked) {
+                                        subMaps.add(mapName);
+                                    } else {
+                                        subMaps.remove(mapName);
+
+                                    }
+                                    db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("subMaps", subMaps);
+
+                                }
+                            });
+                        }
+                    });
+                }
+
+            });
+
         }
-      /*  if(!TextUtils.isEmpty(postList.get(holder.getAdapterPosition()).
 
-                getImageUrl()))
-
-        {
-            Glide.with(context).load(
-                    postList.get(holder.getAdapterPosition()).getImageUrl()
-            ).into(holder.ivImage);
-            holder.ivImage.setVisibility(View.VISIBLE);
-        } else
-
-        {
-            holder.ivImage.setVisibility(View.GONE);
-        }
-        */
         setAnimation(holder.itemView, position);
     }
-
 
     private void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
@@ -243,17 +281,18 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvCreator;
-        public TextView tvTitle;
-        public TextView tvDescription;
-        public TextView date;
-        public at.markushi.ui.CircleButton btnDelete;
-        public at.markushi.ui.CircleButton btnEdit;
+        TextView tvCreator;
+        TextView tvTitle;
+        TextView tvDescription;
+        TextView date;
+        at.markushi.ui.CircleButton btnDelete;
+        at.markushi.ui.CircleButton btnEdit;
+        CheckBox checkBox;
 
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvCreator = itemView.findViewById(R.id.tvCreator);
             tvTitle = itemView.findViewById(R.id.tvTitle);
@@ -261,6 +300,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnEdit = itemView.findViewById(R.id.btnEdit);
             date = itemView.findViewById(R.id.date);
+            checkBox = itemView.findViewById(R.id.checkBox);
         }
     }
 
