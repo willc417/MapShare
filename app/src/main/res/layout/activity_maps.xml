@@ -45,5 +45,14 @@
         android:visibility="invisible"
         android:src="@android:drawable/ic_menu_close_clear_cancel" />
 
+    <at.markushi.ui.CircleButton
+        android:id="@+id/switchBtn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_weight="20"
+        android:layout_gravity="top|start"
+        android:src="@drawable/arrows"
+        app:cb_color="#FFFFFF" />
+
 </android.support.design.widget.CoordinatorLayout>
 
