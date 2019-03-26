@@ -50,6 +50,7 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     //circle button
     implementation 'com.github.markushi:circlebutton:1.1'
+    implementation 'de.hdodenhof:circleimageview:1.2.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

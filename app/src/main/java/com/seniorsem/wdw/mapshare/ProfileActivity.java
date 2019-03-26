@@ -39,6 +39,8 @@ public class ProfileActivity extends AppCompatActivity {
     Button viewMapsBtn;
     @BindView(R.id.findFriendsBtn)
     Button findFriendsBtn;
+    @BindView(R.id.num_followed)
+    TextView tvNumberFollowed;
 
     private static final int RESULT_LOAD_IMAGE = 1;
 
@@ -82,6 +84,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 List<String> maps = currUser.getCreatedMaps();
                 tvNumCreated.setText(String.valueOf(maps.size()));
+
+                List<String> subMaps = currUser.getSubMaps();
+                tvNumberFollowed.setText(String.valueOf(subMaps.size()));
 
                 Uri profilePicUri = Uri.parse(currUser.getProfilePicture());
                 ivProfilePic.setImageURI(profilePicUri);
