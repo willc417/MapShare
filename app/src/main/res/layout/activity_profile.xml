@@ -9,15 +9,38 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:background="#85a6c8"
+        android:layout_height="250dp"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_picture"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp" />
+        <!--
         <ImageView
             android:id="@+id/profile_picture"
             android:layout_width="150dp"
             android:layout_height="150dp"
+
+            android:background="@drawable/circleimage"
+            android:layout_gravity="center_horizontal" />
+        -->
+        <TextView
+            android:id="@+id/change_profile_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:clickable="true"
+            android:text="@string/change_profile_picture"
+            android:textSize="10sp" />
+
             android:layout_gravity="center_horizontal"/>
+
 
         <TextView
             android:id="@+id/username"
@@ -25,15 +48,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:textColor="#000000" />
+            android:textColor="#ffffff" />
     </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardViewID"
-        android:layout_width="200dp"
-        android:layout_height="120dp"
+        android:layout_width="220dp"
+        android:layout_height="80dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp">
+        android:layout_marginTop="200dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,6 +67,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -59,12 +83,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="13sp" />
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
@@ -76,11 +101,11 @@
                     android:textSize="15sp" />
 
                 <TextView
+                    android:id="@+id/num_followed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="number here"
-                    android:textSize="13sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
         </LinearLayout>
@@ -90,17 +115,23 @@
         android:id="@+id/viewMapsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_below="@+id/cardViewID"
         android:layout_centerHorizontal="true"
-        android:text="@string/view_maps" />
+        android:text="@string/view_maps"
+        android:textColor="#fff"
+        android:background="@drawable/profilebuttonstyle"/>
 
     <Button
         android:id="@+id/findFriendsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewMapsBtn"
+        android:layout_marginTop="5dp"
         android:layout_centerHorizontal="true"
         android:visibility="invisible"
-        android:text="@string/find_friends" />
+        android:text="@string/find_friends"
+        android:textColor="#fff"
+        android:background="@drawable/profilebuttonstyle"/>
 
 </RelativeLayout>

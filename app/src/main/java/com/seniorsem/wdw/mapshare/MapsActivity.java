@@ -43,6 +43,11 @@ import com.seniorsem.wdw.mapshare.data.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.markushi.ui.CircleButton;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationListener {
 
     private static final Object FFFFFF = 2.35098856;
@@ -50,6 +55,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private float zoomLevel = 15.5f;
     private Context context;
     SupportMapFragment mapFragment;
+
+    boolean viewingSubs = true;
+
+    @BindView(R.id.switchBtn)
+    CircleButton switchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +72,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         requestNeededPermission();
+
+        ButterKnife.bind(this);
 
         ///////FAB CODE///////
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -126,6 +138,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @OnClick(R.id.switchBtn)
+    void switchMaps() {
+        viewingSubs = !viewingSubs;
+        mapFragment.getMapAsync(this);
+        if (viewingSubs) {
+            Toast.makeText(this, "Viewing Saved Maps", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(this, "Viewing Created Maps", Toast.LENGTH_SHORT).show();
+
+        }
+
+    }
 
     //FAB FUNCTIONS
     public void FABSHOW(final FloatingActionButton faba, final FloatingActionButton fabb, final FloatingActionButton fabc) {
@@ -272,7 +297,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User newUser = documentSnapshot.toObject(User.class);
 
-                List<String> currMaps = newUser.getCreatedMaps();
+                List<String> currMaps;
+                if (!viewingSubs) {
+                    currMaps = newUser.getCreatedMaps();
+                } else {
+                    currMaps = newUser.getSubMaps();
+                }
 
                 for (int i = 0; i < currMaps.size(); i++) {
 
