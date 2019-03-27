@@ -1,10 +1,12 @@
 package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +24,30 @@ import java.util.List;
 
 public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkersRecyclerAdapter.ViewHolder> {
 
+    private CallbackInterface mCallback;
     private Context context;
     private List<MyMarker> myMarkerList;
     private List<String> myMarkerKeys;
     private int lastPosition = -1;
 
+    public interface CallbackInterface{
+
+        /**
+         * Callback invoked when clicked
+         * @param editMarker the marker to be edited
+         */
+        void onEditMarker(MyMarker editMarker, int index);
+    }
+
+
     public ViewMarkersRecyclerAdapter(Context context, String creatorUID) {
+
+        try{
+            mCallback = (CallbackInterface) context;
+        }catch(ClassCastException ex){
+            //.. should log the error or throw and exception
+            Log.e("MyAdapter","Must implement the CallbackInterface in the Activity", ex);
+        }
         this.context = context;
         this.myMarkerList = new ArrayList<MyMarker>();
         this.myMarkerKeys = new ArrayList<String>();
@@ -60,10 +80,8 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent EditIntent = new Intent();
-                EditIntent.setClass(context, CreateAndEditMarkerActivity.class);
-                EditIntent.putExtra("isEdit", getMyMarker(holder.getAdapterPosition()));
-                context.startActivity(EditIntent);
+                if (mCallback != null) {
+                    mCallback.onEditMarker(getMyMarker(holder.getAdapterPosition()), holder.getAdapterPosition()); }
             }
         });
 

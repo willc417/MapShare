@@ -1,6 +1,7 @@
 package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
     private List<String> mapKeys;
     private String creatorUID;
     private int lastPosition = -1;
+    private Activity activity;
 
     public ViewMapsRecyclerAdapter(Context context, String creatorUID) {
         this.context = context;
@@ -103,6 +105,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
 
             holder.btnDelete.setVisibility(View.GONE);
             holder.btnEdit.setVisibility(View.GONE);
+
             db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
