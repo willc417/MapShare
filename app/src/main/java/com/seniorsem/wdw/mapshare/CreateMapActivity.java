@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.seniorsem.wdw.mapshare.adapter.ViewMapsRecyclerAdapter;
 import com.seniorsem.wdw.mapshare.adapter.ViewMarkersRecyclerAdapter;
 import com.seniorsem.wdw.mapshare.data.Map;
 
@@ -44,7 +45,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 
-public class CreateMapActivity extends AppCompatActivity {
+public class CreateMapActivity extends AppCompatActivity implements ViewMarkersRecyclerAdapter.CallbackInterface {
 
 
     Map editMap;
@@ -111,7 +112,7 @@ public class CreateMapActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        viewMarkersRecyclerAdapter = new ViewMarkersRecyclerAdapter(getApplicationContext(),
+        viewMarkersRecyclerAdapter = new ViewMarkersRecyclerAdapter(this,
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         RecyclerView recyclerViewPlaces = (RecyclerView) findViewById(
@@ -236,6 +237,17 @@ public class CreateMapActivity extends AppCompatActivity {
         CreateNewMarker.setClass(CreateMapActivity.this, CreateAndEditMarkerActivity.class);
         startActivityForResult(CreateNewMarker, 1);
 
+    }
+    @Override
+    public void onEditMarker(MyMarker editMarker, int index) {
+        Log.d("TAG_UI", "HERE");
+        Intent EditIntent = new Intent();
+        EditIntent.setClass(CreateMapActivity.this, CreateAndEditMarkerActivity.class);
+        Bundle b = new Bundle();
+        b.putInt("index", index);
+        b.putSerializable("isEdit", editMarker);
+        EditIntent.putExtra("EditBundle", b);
+        startActivityForResult(EditIntent, 2);
     }
 
     private void fillFields(final String documentKey) {
@@ -371,10 +383,24 @@ public class CreateMapActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 Log.d("TAG_UI", "onActivityResult");
-                MyMarker myMarker = (MyMarker) data.getExtras().getSerializable("NewMarker");
+                Bundle b = data.getBundleExtra("markerBundle");
+                MyMarker myMarker = (MyMarker) b.getSerializable("NewMarker");
                 viewMarkersRecyclerAdapter.addMarker(myMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
             }
         }
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                Log.d("TAG_UI", "onActivityResult");
+                //MyMarker myMarker = (MyMarker) data.getExtras().getSerializable("NewMarker");
+                //int index = data.getIntExtra("index", 0);
+                Bundle b = data.getBundleExtra("markerBundle");
+                MyMarker myMarker = (MyMarker) b.getSerializable("NewMarker");
+                int index = b.getInt("index");
+                viewMarkersRecyclerAdapter.removeMarker(index);
+                viewMarkersRecyclerAdapter.addMarker(myMarker, String.valueOf(viewMarkersRecyclerAdapter.getItemCount()));
+            }
+        }
+
     }
 
     public void showProgressDialog() {

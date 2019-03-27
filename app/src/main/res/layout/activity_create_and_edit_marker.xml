@@ -160,6 +160,14 @@
 
     </RelativeLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/uploadPhoto"
+        android:layout_below="@+id/currLocLayout"
+        android:layout_centerHorizontal="true"
+        android:text="Upload"/>
+
     <TextView
         android:visibility="invisible"
         android:id="@+id/tvSavedLat"
@@ -178,12 +186,18 @@
         android:layout_alignParentBottom="true"
         android:text="@string/lon_with_param" />
 
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/uploadPhoto"
+        android:layout_centerHorizontal="true"/>
+
     <Button
         android:id="@+id/CreateBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-
         android:layout_alignParentBottom="true"
         android:text="@string/create" />
 
