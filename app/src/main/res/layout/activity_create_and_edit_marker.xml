@@ -188,8 +188,8 @@
 
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_below="@+id/uploadPhoto"
         android:layout_centerHorizontal="true"/>
 

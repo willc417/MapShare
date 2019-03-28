@@ -1,9 +1,13 @@
 package com.seniorsem.wdw.mapshare;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +29,7 @@ import com.google.firebase.storage.UploadTask;
 import com.seniorsem.wdw.mapshare.data.User;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
@@ -48,9 +53,6 @@ public class ProfileActivity extends AppCompatActivity {
     Button findFriendsBtn;
     @BindView(R.id.num_followed)
     TextView tvNumberFollowed;
-
-
-    private static final int RESULT_LOAD_IMAGE = 1;
 
     String documentKey;
 
@@ -77,7 +79,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-
         db.collection("users").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -92,15 +93,12 @@ public class ProfileActivity extends AppCompatActivity {
                 List<String> subMaps = currUser.getSubMaps();
                 tvNumberFollowed.setText(String.valueOf(subMaps.size()));
 
-                Uri profilePicUri = Uri.parse(currUser.getProfilePicture());
-                ivProfilePic.setImageURI(profilePicUri);
-
                 String profilePicString = currUser.getProfilePicture();
 
 
                 Glide.with(ProfileActivity.this).load(profilePicString).into(ivProfilePic);
             }
-            });
+        });
 
     }
 
@@ -121,47 +119,61 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
-
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null){
-            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-            final Uri selectedImage = data.getData();
-            ivProfilePic.setImageURI(selectedImage);
-            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User currUser = documentSnapshot.toObject(User.class);
-                    String uriString = selectedImage.toString();
-                    currUser.setProfilePicture(uriString);
-                    db.collection("users").document(currUser.getUID()).update("profilePicture", uriString);
-                }
-            });
-        }
-    } */
-
     @OnClick(R.id.profile_picture)
     void attachClick() {
-        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intentCamera, 101);
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
+                this);
+        myAlertDialog.setTitle("Upload Pictures Option");
+        myAlertDialog.setMessage("How do you want to set your picture?");
+
+        myAlertDialog.setPositiveButton("Gallery",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        Intent pictureActionIntent = new Intent(
+                                Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(
+                                pictureActionIntent,
+                                102);
+
+                    }
+                });
+
+        myAlertDialog.setNegativeButton("Camera",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intentCamera, 101);
+
+                    }
+                });
+        myAlertDialog.show();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bitmap imageBitmap = null;
         if (requestCode == 101 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            ivProfilePic.setImageBitmap(imageBitmap);
-            ivProfilePic.setVisibility(View.VISIBLE);
+            imageBitmap = (Bitmap) extras.get("data");
+        }
+        if (requestCode == 102 && resultCode == RESULT_OK) {
+            final Uri uri = data.getData();
+            imageBitmap = null;
             try {
-                uploadPostToStorage();
-            } catch (Exception e) {
+                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+        ivProfilePic.setImageBitmap(imageBitmap);
+        ivProfilePic.setVisibility(View.VISIBLE);
+        try {
+            uploadPostToStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
