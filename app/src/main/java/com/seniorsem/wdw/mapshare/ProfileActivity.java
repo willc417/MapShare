@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -58,6 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
+    String currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         documentKey = getIntent().getStringExtra("username");
+        currentUser = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+
         getProfileInfo();
 
     }
@@ -121,35 +126,38 @@ public class ProfileActivity extends AppCompatActivity {
 
     @OnClick(R.id.profile_picture)
     void attachClick() {
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
-                this);
-        myAlertDialog.setTitle("Upload Pictures Option");
-        myAlertDialog.setMessage("How do you want to set your picture?");
+        if (documentKey == currentUser){
+            AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
+                    this);
+            myAlertDialog.setTitle("Upload Pictures Option");
+            myAlertDialog.setMessage("How do you want to set your picture?");
 
-        myAlertDialog.setPositiveButton("Gallery",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
+            myAlertDialog.setPositiveButton("Gallery",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
 
-                        Intent pictureActionIntent = new Intent(
-                                Intent.ACTION_PICK,
-                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(
-                                pictureActionIntent,
-                                102);
+                            Intent pictureActionIntent = new Intent(
+                                    Intent.ACTION_PICK,
+                                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(
+                                    pictureActionIntent,
+                                    102);
 
-                    }
-                });
+                        }
+                    });
 
-        myAlertDialog.setNegativeButton("Camera",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
+            myAlertDialog.setNegativeButton("Camera",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface arg0, int arg1) {
 
-                        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intentCamera, 101);
+                            Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intentCamera, 101);
 
-                    }
-                });
-        myAlertDialog.show();
+                        }
+                    });
+            myAlertDialog.show();
+        }
+
     }
 
     @Override
