@@ -2,6 +2,7 @@ package com.seniorsem.wdw.mapshare;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,10 +10,12 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -147,19 +150,35 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
     @OnClick(R.id.uploadPhoto)
     void chooseImage() {
-        /*Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);*/
+        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
+                this);
+        myAlertDialog.setTitle("Upload Pictures Option");
+        myAlertDialog.setMessage("How do you want to set your picture?");
 
-        /*Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, PICK_IMAGE_REQUEST);
+        myAlertDialog.setPositiveButton("Gallery",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
 
-        */
-        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intentCamera, 71);
+                        Intent pictureActionIntent = new Intent(
+                                Intent.ACTION_PICK,
+                                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(
+                                pictureActionIntent,
+                                72);
 
+                    }
+                });
+
+        myAlertDialog.setNegativeButton("Camera",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+
+                        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intentCamera, 71);
+
+                    }
+                });
+        myAlertDialog.show();
     }
 
     @OnClick(R.id.searchBtn)
@@ -289,19 +308,27 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode==RESULT_OK){
-
+        Bitmap imageBitmap = null;
+        if (requestCode == 71 && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-            imageView.setVisibility(View.VISIBLE);
+            imageBitmap = (Bitmap) extras.get("data");
+        }
+        if (requestCode == 72 && resultCode == RESULT_OK) {
+            final Uri uri = data.getData();
+            imageBitmap = null;
             try {
-                uploadPostToStorage();
-            } catch (Exception e) {
+                imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-    }
+        }
+        imageView.setImageBitmap(imageBitmap);
+        imageView.setVisibility(View.VISIBLE);
+        try {
+            uploadPostToStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void uploadPostToStorage() throws Exception {
