@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#5da2d5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="lightBlue">#4df9f0</color>
     <color name="textColorPrimary">#FFFFFF</color>
@@ -8,4 +8,8 @@
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="profileBackground">#e4e4e4</color>
+    <color name="accent1">#90ccf4</color>
+    <color name="accent2">#ececec</color>
+    <color name="accent3">#f3d250</color>
+    <color name="accent4">#f78888</color>
 </resources>
