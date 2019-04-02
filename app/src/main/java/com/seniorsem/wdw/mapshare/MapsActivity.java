@@ -54,6 +54,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Context context;
     SupportMapFragment mapFragment;
 
+    double longitude;
+    double latitude;
+
     boolean viewingSubs = true;
 
     @BindView(R.id.switchBtn)
@@ -126,6 +129,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intentMain);
             }
         });
+
+        getLocation();
     }
 
 
@@ -197,6 +202,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
 
         googleMap.clear();
+
 
         if (ActivityCompat.checkSelfPermission(MapsActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -384,5 +390,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onProviderDisabled(String provider) {
 
     }
+
+    void getLocation() {
+        try {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+        }
+        catch(SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
