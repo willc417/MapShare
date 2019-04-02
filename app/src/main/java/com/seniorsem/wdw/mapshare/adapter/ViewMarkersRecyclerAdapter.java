@@ -1,9 +1,7 @@
 package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seniorsem.wdw.mapshare.CreateAndEditMarkerActivity;
 import com.seniorsem.wdw.mapshare.R;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
 

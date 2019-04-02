@@ -30,5 +30,9 @@
     <string name="type_in_address">Type in Address</string>
     <string name="view_maps">View Maps</string>
     <string name="find_friends">Find Friends</string>
+    <string name="enter_a_friend_s_username">Enter a friend\'s username</string>
+    <string name="search">Search</string>
+    <string name="followed">Followed</string>
+    <string name="follow">Follow</string>
 
 </resources>
