@@ -142,8 +142,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         if (viewingSubs) {
             Toast.makeText(this, "Viewing Saved Maps", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Toast.makeText(this, "Viewing Created Maps", Toast.LENGTH_SHORT).show();
 
         }
@@ -259,23 +258,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
-                    Toast.makeText(MapsActivity.this, "Marker Click Test", Toast.LENGTH_LONG).show();
-                    String info = marker.getSnippet();
 
-                    if (info != null) {
-                        String[] splitSnippet = info.split("\n");
-                        String mapName = splitSnippet[2].split(": ")[1] + "_" + splitSnippet[0].split(": ")[1].replace(" ", "_");
-                        int markerNum = Integer.valueOf(splitSnippet[3].split("# ")[1]);
+                    Bundle extras = new Bundle();
+                    MyMarker thisMarker = (MyMarker) marker.getTag();
+                    extras.putSerializable("thisMarker", thisMarker);
 
-                        Bundle extras = new Bundle();
-                        extras.putInt("MarkerIndex", markerNum);
-                        extras.putString("MapName", mapName);
-
-                        Intent ViewNearbyMarker = new Intent();
-                        ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
-                        ViewNearbyMarker.putExtras(extras);
-                        startActivity(ViewNearbyMarker);
-                    }
+                    Intent ViewNearbyMarker = new Intent();
+                    ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
+                    ViewNearbyMarker.putExtras(extras);
+                    startActivity(ViewNearbyMarker);
                 } else {
                     Toast.makeText(MapsActivity.this, "Move closer to unlock content", Toast.LENGTH_LONG).show();
                 }
@@ -283,8 +274,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
     }
+
 
     private void AddMarkers(final GoogleMap googleMap) {
 
@@ -312,8 +303,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             for (int j = 0; j < myMarkers.size(); j++) {
                                 MyMarker curr = myMarkers.get(j);
                                 googleMap.addMarker(new MarkerOptions().position(new LatLng(curr.getLat(), curr.getLon())).title(curr.getTitle())
-                                        .snippet("Map Name: " + displayMap.getTitle() + "\nDescription: " + curr.getDescription() + "\nCreator: " + displayMap.getCreaterUID() + "\nMarker # " + j)
-                                        .icon(BitmapDescriptorFactory.defaultMarker(displayMap.getMapColor())));
+                                        .snippet("Map Name: " + displayMap.getTitle() + " \nCreator: " + displayMap.getCreaterUID())
+                                        .icon(BitmapDescriptorFactory.defaultMarker(displayMap.getMapColor()))).setTag(curr);
                             }
                         }
                     });
@@ -336,7 +327,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         if (requestCode == 101) {
             if (grantResults.length > 0 &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {

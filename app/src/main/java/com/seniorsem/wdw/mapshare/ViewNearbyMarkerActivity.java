@@ -35,27 +35,13 @@ public class ViewNearbyMarkerActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
         Intent thisIntent = getIntent();
         Bundle b = thisIntent.getExtras();
-        String mapName = b.getString("MapName");
-        final int markerNum = b.getInt("MarkerIndex");
+        MyMarker thisMarker = (MyMarker) b.getSerializable("thisMarker");
 
-
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        db.collection("createdMaps").document(mapName).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Map newMap = documentSnapshot.toObject(Map.class);
-                MyMarker thisMarker = newMap.getMyMarkers().get(markerNum);
-
-                markerTitle.setText(thisMarker.getTitle());
-                nearbyMarkerDesc.setText(thisMarker.getDescription());
-                Glide.with(ViewNearbyMarkerActivity.this).load(thisMarker.getImageURL()).into(markerImage);
-                //Currently should pull up Dyers but its pulling up hopdoddy. maybe error in markerNum7
-
-            }
-        });
+        markerTitle.setText(thisMarker.getTitle());
+        nearbyMarkerDesc.setText(thisMarker.getDescription());
+        Glide.with(ViewNearbyMarkerActivity.this).load(thisMarker.getImageURL()).into(markerImage);
     }
 }
+
