@@ -3,8 +3,10 @@ package com.seniorsem.wdw.mapshare;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -23,6 +25,9 @@ public class ViewNearbyMarkerActivity extends AppCompatActivity {
     @BindView(R.id.nearbyMarkerDesc)
     TextView nearbyMarkerDesc;
 
+    @BindView(R.id.nearbyMarkerImage)
+    ImageView markerImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,7 @@ public class ViewNearbyMarkerActivity extends AppCompatActivity {
         Intent thisIntent = getIntent();
         Bundle b = thisIntent.getExtras();
         String mapName = b.getString("MapName");
-        final int markerNum = b.getInt("MarkerNum");
+        final int markerNum = b.getInt("MarkerIndex");
 
 
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -47,6 +52,9 @@ public class ViewNearbyMarkerActivity extends AppCompatActivity {
 
                 markerTitle.setText(thisMarker.getTitle());
                 nearbyMarkerDesc.setText(thisMarker.getDescription());
+                Glide.with(ViewNearbyMarkerActivity.this).load(thisMarker.getImageURL()).into(markerImage);
+                //Currently should pull up Dyers but its pulling up hopdoddy. maybe error in markerNum7
+
             }
         });
     }

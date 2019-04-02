@@ -214,8 +214,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        final double longitude = location.getLongitude();
-        final double latitude = location.getLatitude();
+        final double longitude = -90.051; //location.getLongitude();
+        final double latitude = 35.139;//location.getLatitude();
 
 
         LatLng player = new LatLng(latitude, longitude);
