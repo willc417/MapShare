@@ -3,14 +3,12 @@ package com.seniorsem.wdw.mapshare;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,8 +19,6 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -55,10 +51,16 @@ public class ProfileActivity extends AppCompatActivity {
     Button findFriendsBtn;
     @BindView(R.id.num_followed)
     TextView tvNumberFollowed;
+    @BindView(R.id.addFriendBtn)
+    Button addFriendBtn;
+    @BindView(R.id.addFriendText)
+    TextView addFriendText;
 
     String documentKey;
 
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
 
     String currentUser;
 
@@ -76,11 +78,26 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void getProfileInfo() {
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
         if (documentKey == null) {
             documentKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
             findFriendsBtn.setVisibility(View.VISIBLE);
+        }
+        else {
+            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User currUser = documentSnapshot.toObject(User.class);
+                    List<String> friends = currUser.getFriends();
+                    if (friends.contains(documentKey)) {
+                        addFriendBtn.setVisibility(View.GONE);
+                        addFriendText.setVisibility(View.VISIBLE);
+                    }
+                    else{
+                        addFriendBtn.setVisibility(View.VISIBLE);
+                        addFriendText.setVisibility(View.GONE);
+                        }
+                }
+            });
         }
 
 
@@ -100,11 +117,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 String profilePicString = currUser.getProfilePicture();
 
-
                 Glide.with(ProfileActivity.this).load(profilePicString).into(ivProfilePic);
             }
         });
-
     }
 
     @OnClick(R.id.viewMapsBtn)
@@ -123,10 +138,27 @@ public class ProfileActivity extends AppCompatActivity {
         startActivity(ProfileIntent);
     }
 
+    @OnClick(R.id.addFriendBtn)
+    void addFriendToDB() {
+        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currUser = documentSnapshot.toObject(User.class);
+                List<String> friends = currUser.getFriends();
+                friends.add(documentKey);
+                db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("friends", friends);
+            }
+        });
+
+        addFriendBtn.setVisibility(View.GONE);
+        addFriendText.setVisibility(View.VISIBLE);
+
+    }
+
 
     @OnClick(R.id.profile_picture)
     void attachClick() {
-        if (documentKey == currentUser){
+        if (documentKey.equals(currentUser)){
             AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
                     this);
             myAlertDialog.setTitle("Upload Pictures Option");
