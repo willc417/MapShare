@@ -73,14 +73,13 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         holder.date.setText(mapList.get(holder.getAdapterPosition()).getDate());
         holder.checkBox.setOnCheckedChangeListener(null);
 
-//        final String[] mapName = {holder.tvCreator.getText().toString() + "_" + holder.tvTitle.getText().toString().replace(" ", "_")};
-
         setAnimation(holder.itemView, position);
 
         if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(
                 mapList.get(holder.getAdapterPosition()).getCreaterUID())) {
 
             holder.checkBox.setVisibility(View.GONE);
+            holder.checkBoxText.setVisibility(View.GONE);
 
             holder.btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -99,11 +98,11 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
                     removeMap(holder.getAdapterPosition());
                 }
             });
-            //holder.subCheck.setVisibility(View.GONE);
         } else {
 
             holder.btnDelete.setVisibility(View.GONE);
             holder.btnEdit.setVisibility(View.GONE);
+            holder.checkBoxText.setVisibility(View.VISIBLE);
 
             db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -292,6 +291,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         at.markushi.ui.CircleButton btnDelete;
         at.markushi.ui.CircleButton btnEdit;
         CheckBox checkBox;
+        TextView checkBoxText;
 
 
         ViewHolder(View itemView) {
@@ -303,6 +303,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
             btnEdit = itemView.findViewById(R.id.btnEdit);
             date = itemView.findViewById(R.id.date);
             checkBox = itemView.findViewById(R.id.checkBox);
+            checkBoxText = itemView.findViewById(R.id.checkBoxText);
         }
     }
 

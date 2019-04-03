@@ -3,6 +3,8 @@
     <string name="button">Button</string>
     <string name="mapshare">MapShare</string>
     <string name="username">Username</string>
+    <string name="currUsername">Viewing: %1$s\'s Maps</string>
+
     <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="log_in">Log In</string>
@@ -34,5 +36,6 @@
     <string name="search">Search</string>
     <string name="followed">Followed</string>
     <string name="follow">Follow</string>
+    <string name="save_map">Save Map</string>
 
 </resources>

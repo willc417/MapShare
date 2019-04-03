@@ -48,6 +48,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/remove"
+            android:tint="#FF0000"
             android:layout_width="40dp"
             app:cb_color="#FFFFFF"
             android:layout_height="40dp" />
