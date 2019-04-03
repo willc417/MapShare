@@ -60,10 +60,11 @@ public class ViewMapsActivity extends AppCompatActivity {
 
         if (documentKey == null) {
             documentKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+            currUsername.setVisibility(View.INVISIBLE);
 
         }
         else {
-        currUsername.setText(documentKey);
+            currUsername.setText(getString(R.string.currUsername, documentKey));
         }
 
         viewMapsRecyclerAdapter = new ViewMapsRecyclerAdapter(getApplicationContext(),
@@ -188,10 +189,10 @@ public class ViewMapsActivity extends AppCompatActivity {
         showProgressDialog();
         if (viewingCreated) {
             viewingCreated = false;
-            btnSwitch.setText("Saved Maps");
+            btnSwitch.setText("Show Created Maps");
         } else {
             viewingCreated = true;
-            btnSwitch.setText("Created Maps");
+            btnSwitch.setText("Show Saved Maps");
         }
         viewMapsRecyclerAdapter.removeAll();
         initPosts();

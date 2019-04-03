@@ -2,27 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_view_map"
+    android:paddingEnd="10dp"
+    android:paddingBottom="20dp"
+    android:paddingStart="10dp"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/username"
-        android:id="@+id/currUsername"/>
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:id="@+id/logo"/>
 
     <Button
-        android:layout_below="@+id/currUsername"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Created Maps"
+        android:text="Show Created Maps"
+        android:layout_marginTop="20dp"
         android:id="@+id/switchBtn"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/profilebuttonstyle"
         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:layout_below="@+id/logo"
+        android:id="@+id/currUsername"/>
 
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/switchBtn"
+        android:layout_below="@+id/currUsername"
         android:id="@+id/recyclerViewMaps"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -35,6 +51,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/fab_margin"
+        android:tint="@color/colorPrimary"
         android:src="@android:drawable/ic_menu_add" />
     <include layout="@layout/fab_layout"/>
 
@@ -44,6 +61,7 @@
         android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:tint="@color/colorPrimary"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="invisible"
         android:src="@android:drawable/ic_menu_close_clear_cancel" />

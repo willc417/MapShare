@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
     android:padding="20dp"
-    android:background="@color/colorPrimary"
     android:id="@+id/linear_login"
     >
 
-    <TextView
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/mapshare"
-        android:textSize="40sp"
-        android:textColor="@color/textColorPrimary"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_gravity="center"
+        android:src="@drawable/logo"
         />
 
     <android.support.design.widget.TextInputLayout
-        android:textColorHint="@color/textColorPrimary"
+        android:textColorHint="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp">
 
         <EditText
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/colorPrimary"
             android:id="@+id/username_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,14 +36,14 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:textColorHint="@color/textColorPrimary"
+        android:textColorHint="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp">
     <EditText
         android:id="@+id/password_edit"
-        android:textColor="@color/textColorPrimary"
+        android:textColor="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50sp"
@@ -67,17 +63,22 @@
 
         <Button
             android:id="@+id/register_btn"
+            android:layout_marginEnd="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/register"
-            android:layout_weight="100"/>
+            android:layout_weight="100"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/profilebuttonstyle"/>
 
         <Button
             android:id="@+id/login_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="100"
-            android:text="@string/log_in"/>
+            android:textColor="#FFFFFF"
+            android:text="@string/log_in"
+            android:background="@drawable/profilebuttonstyle"/>
 
     </LinearLayout>
 </LinearLayout>
