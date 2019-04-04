@@ -18,6 +18,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -149,9 +150,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Toast.makeText(this, "Viewing Saved Maps", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Viewing Created Maps", Toast.LENGTH_SHORT).show();
-
         }
+    }
 
+    @OnClick(R.id.switchBtn2)
+    void switchMaps2(){
+        Button btn = (Button)findViewById(R.id.switchBtn2);
+        viewingSubs = !viewingSubs;
+        mapFragment.getMapAsync(this);
+        if(viewingSubs){
+            Toast.makeText(this,"Saved",Toast.LENGTH_LONG).show();
+            btn.setText("  Saved");
+        }else{
+            Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();
+            btn.setText("Created");
+        }
     }
 
     //FAB FUNCTIONS

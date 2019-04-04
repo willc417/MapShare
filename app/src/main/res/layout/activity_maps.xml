@@ -52,9 +52,19 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_weight="20"
-        android:layout_gravity="top|start"
+        android:layout_gravity="top|end"
         android:src="@drawable/arrows"
         app:cb_color="#FFFFFF" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity ="top|start"
+        android:id="@+id/switchBtn2"
+        android:layout_margin="10dp"
+        android:text="@string/mapView_Save_Create"
+        android:textColor="#fff"
+        android:background="@drawable/profilebuttonstyle"/>
 
 </android.support.design.widget.CoordinatorLayout>
 

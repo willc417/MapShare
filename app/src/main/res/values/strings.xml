@@ -40,4 +40,5 @@
     <string name="add_marker">Add Marker</string>
     <string name="upload_image">Upload Image</string>
 
+    <string name="mapView_Save_Create">Saved</string>
 </resources>
