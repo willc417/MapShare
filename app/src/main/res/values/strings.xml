@@ -39,5 +39,7 @@
     <string name="save_map">Save Map</string>
     <string name="add_marker">Add Marker</string>
     <string name="upload_image">Upload Image</string>
+    <string name="show_saved_maps">Show Saved Maps</string>
+    <string name="choose_a_marker_color">Choose a Marker Color</string>
 
 </resources>

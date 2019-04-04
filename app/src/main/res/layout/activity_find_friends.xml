@@ -3,15 +3,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".FindFriendsActivity">
 
-    <EditText
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/friendSearch_TIL"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/etSearchUsername"
-        android:hint="@string/enter_a_friend_s_username"/>
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:theme="@style/TextLabel"
+        >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etSearchUsername"
+            android:hint="@string/enter_a_friend_s_username"/>
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -22,7 +34,6 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/searchFriendBtn"
         android:id="@+id/recyclerViewFriends"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

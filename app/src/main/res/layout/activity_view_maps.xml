@@ -19,7 +19,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Show Created Maps"
+        android:text="@string/show_saved_maps"
         android:layout_marginTop="20dp"
         android:id="@+id/switchBtn"
         android:textColor="#FFFFFF"
