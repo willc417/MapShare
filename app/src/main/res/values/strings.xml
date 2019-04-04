@@ -37,5 +37,7 @@
     <string name="followed">Followed</string>
     <string name="follow">Follow</string>
     <string name="save_map">Save Map</string>
+    <string name="add_marker">Add Marker</string>
+    <string name="upload_image">Upload Image</string>
 
 </resources>

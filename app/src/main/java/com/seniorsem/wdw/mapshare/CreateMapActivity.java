@@ -59,8 +59,8 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
     EditText etMapDesc;
     @BindView(R.id.btn_create_map)
     Button btnCreateMap;
-    @BindView(R.id.privacy_sp)
-    Spinner spPrivacy;
+    /*@BindView(R.id.privacy_sp)
+    Spinner spPrivacy;*/
     @BindView(R.id.mapColor_sp)
     Spinner spMapColor;
 
@@ -93,13 +93,10 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
         //TEMP CODE FOR COLOR SPINNER
 
 
-
-
-
         ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.privacy_array, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spPrivacy.setAdapter(spinnerAdapter);
+        //spPrivacy.setAdapter(spinnerAdapter);
 
         MCspinnerAdapter = ArrayAdapter.createFromResource(this,
                 R.array.mapColor_array, android.R.layout.simple_spinner_item);
@@ -123,9 +120,10 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
         if (isEdit != null) {
             fillFields(isEdit);
         }
+    }
 
 
-        ///////FAB CODE///////
+   /*     ///////FAB CODE///////
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final FloatingActionButton fabHide = (FloatingActionButton) findViewById(R.id.fabHide);
         final FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fab_Home);
@@ -215,11 +213,12 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
         fabC.hide();
     }
     ///////END FAB CODE///////
+   */
 
-    @OnItemSelected(R.id.privacy_sp)
+    /*@OnItemSelected(R.id.privacy_sp)
     public void spinnerItemSelected(Spinner spinner, int position) {
         spinner_position = position;
-    }
+    }*/
 
     @OnItemSelected(R.id.mapColor_sp)
     public void mapColorspinnerItemSelected(Spinner spinner, int position) {
@@ -256,7 +255,7 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
                 editMap = documentSnapshot.toObject(Map.class);
                 etMapTitle.setText(editMap.getTitle());
                 etMapDesc.setText(editMap.getDescription());
-                spPrivacy.setSelection(editMap.getPrivacy());
+                //spPrivacy.setSelection(editMap.getPrivacy());
 
                 List<MyMarker> myMarkers = editMap.getMyMarkers();
                 for (int i = 0; i < myMarkers.size(); i++) {
