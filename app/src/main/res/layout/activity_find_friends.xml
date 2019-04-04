@@ -17,7 +17,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/searchFriendBtn"
-        android:text="@string/search"/>
+        android:text="@string/search"
+        android:background="@drawable/profilebuttonstyle"/>
 
 
     <android.support.v7.widget.RecyclerView

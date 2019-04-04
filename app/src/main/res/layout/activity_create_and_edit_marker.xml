@@ -9,6 +9,7 @@
     tools:context=".CreateAndEditMarkerActivity">
 
     <android.support.design.widget.TextInputLayout
+        android:theme="@style/TextLabel"
         android:id="@+id/inputLayoutTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +25,7 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/inputLayoutDesc"
+        android:theme="@style/TextLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/inputLayoutTitle">
@@ -110,6 +112,7 @@
         android:visibility="invisible">
 
         <android.support.design.widget.TextInputLayout
+            android:theme="@style/TextLabel"
             android:id="@+id/lonTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -122,6 +125,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
+            android:theme="@style/TextLabel"
             android:id="@+id/latTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -166,7 +170,8 @@
         android:id="@+id/uploadPhoto"
         android:layout_below="@+id/currLocLayout"
         android:layout_centerHorizontal="true"
-        android:text="Upload"/>
+        android:text="@string/upload_image"
+        android:background="@drawable/profilebuttonstyle"/>
 
     <TextView
         android:visibility="invisible"
@@ -199,6 +204,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:text="@string/create" />
+        android:text="@string/create"
+        android:background="@drawable/profilebuttonstyle"/>
 
 </RelativeLayout>

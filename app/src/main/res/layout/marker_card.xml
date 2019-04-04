@@ -33,14 +33,12 @@
 
         <TextView
             android:id="@+id/tvLat"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvDescription" />
 
         <TextView
             android:id="@+id/tvLon"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvLat" />
@@ -52,6 +50,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/edit"
+            android:tint="@color/colorPrimary"
             app:cb_color="#FFFFFF"
             android:text="@string/edit"
             />
@@ -61,6 +60,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/delete"
+            android:tint="#FF0000"
             android:layout_width="40dp"
             android:layout_height="40dp"
             app:cb_color="#FFFFFF"

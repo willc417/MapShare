@@ -123,10 +123,12 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         Bundle b = getIntent().getBundleExtra("EditBundle");
-        editMarker = (MyMarker) b.getSerializable("isEdit");
-        editMarkerIndex = b.getInt("index");
-        if (editMarker != null) {
-            fillMarkerFields(editMarker);
+        if (b != null) {
+            editMarker = (MyMarker) b.getSerializable("isEdit");
+            editMarkerIndex = b.getInt("index");
+            if (editMarker != null) {
+                fillMarkerFields(editMarker);
+            }
         }
 
     }
@@ -233,9 +235,9 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     @OnClick(R.id.saveCbtn)
     void SaveCoordinates() {
 
-            LatLng searchLatLng = geocodeFromAddress(etSearch.getText().toString());
-            LatEntered = searchLatLng.latitude;
-            LonEntered = searchLatLng.longitude;
+        LatLng searchLatLng = geocodeFromAddress(etSearch.getText().toString());
+        LatEntered = searchLatLng.latitude;
+        LonEntered = searchLatLng.longitude;
 
         if (LatEntered != 86.0) {
             tvSavedLon.setText(getString(R.string.lat_with_param, LatEntered));
@@ -271,13 +273,13 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
             List<Address> addrs = null;
             addrs = gc.getFromLocationName(address, 1);
 
-            if (addrs.isEmpty()){
+            if (addrs.isEmpty()) {
                 Toast.makeText(this, "Enter a valid address.", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
 
-            searchLat = addrs.get(0).getLatitude();
-            searchLon = addrs.get(0).getLongitude(); }
+                searchLat = addrs.get(0).getLatitude();
+                searchLon = addrs.get(0).getLongitude();
+            }
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -293,16 +295,15 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
         if ((LatEntered > 85.0 || LatEntered < -85.0) || (LonEntered > 180.0 || LonEntered < -180.0)) {
             Toast.makeText(this, "Enter a valid location", Toast.LENGTH_SHORT).show();
-        }
-        else {
-        MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, filePath, null, null, null);
-        Intent resultIntent = new Intent();
-        Bundle b = new Bundle();
-        b.putSerializable("NewMarker", newMarker);
-        b.putInt("index", editMarkerIndex);
-        resultIntent.putExtra("markerBundle", b);
-        setResult(RESULT_OK, resultIntent);
-        finish();
+        } else {
+            MyMarker newMarker = new MyMarker(LatEntered, LonEntered, titleEntered, descEntered, filePath, null, null, null);
+            Intent resultIntent = new Intent();
+            Bundle b = new Bundle();
+            b.putSerializable("NewMarker", newMarker);
+            b.putInt("index", editMarkerIndex);
+            resultIntent.putExtra("markerBundle", b);
+            setResult(RESULT_OK, resultIntent);
+            finish();
         }
     }
 
