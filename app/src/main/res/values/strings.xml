@@ -44,6 +44,7 @@
     <string name="customize_your_marker">Customize your Marker!</string>
     <string name="upload">Upload</string>
     <string name="remove">Remove</string>
+    
 
     <string name="mapView_Save_Create">Saved</string>
 </resources>
