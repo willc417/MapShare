@@ -88,16 +88,14 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     @BindView(R.id.nearbyAddress)
     TextView tvNearbyAddress;
 
-    @BindView(R.id.tvSavedLat)
-    TextView tvSavedLat;
-    @BindView(R.id.tvSavedLon)
-    TextView tvSavedLon;
-
     @BindView(R.id.imgView)
     ImageView imageView;
 
     @BindView(R.id.uploadPhoto)
     Button btnPhoto;
+
+    @BindView(R.id.removePhoto)
+    Button btnRemove;
 
     public String filePath;
 
@@ -145,9 +143,23 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
         filePath = editMarker.getImageURL();
 
+        if (filePath != null) {
+            imageView.setVisibility(View.VISIBLE);
+            btnRemove.setVisibility(View.VISIBLE);
+        }
         Glide.with(CreateAndEditMarkerActivity.this).load(filePath).into(imageView);
 
     }
+
+    @OnClick(R.id.removePhoto)
+    void removeImage() {
+
+        filePath = null;
+        imageView.setVisibility(View.GONE);
+        btnRemove.setVisibility(View.GONE);
+
+    }
+
 
 
     @OnClick(R.id.uploadPhoto)
@@ -211,10 +223,7 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         LatEntered = location.getLatitude();
         LonEntered = location.getLongitude();
-        tvSavedLon.setText(getString(R.string.lat_with_param, LatEntered));
-        tvSavedLat.setText(getString(R.string.lon_with_param, LonEntered));
-        tvSavedLon.setVisibility(View.VISIBLE);
-        tvSavedLat.setVisibility(View.VISIBLE);
+
 
         tvNearbyAddress.setText(geocodeFromCoordinates(LatEntered, LonEntered));
 
@@ -222,8 +231,6 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
     @OnClick(R.id.coordinatesBtn)
     void ExpandCoordinates() {
-        tvSavedLon.setVisibility(View.INVISIBLE);
-        tvSavedLat.setVisibility(View.INVISIBLE);
         currLocLayout.setVisibility(View.INVISIBLE);
         coordinatesLayout.setVisibility(View.VISIBLE);
         searchLayout.setVisibility(View.INVISIBLE);
@@ -239,12 +246,6 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
         LatEntered = searchLatLng.latitude;
         LonEntered = searchLatLng.longitude;
 
-        if (LatEntered != 86.0) {
-            tvSavedLon.setText(getString(R.string.lat_with_param, LatEntered));
-            tvSavedLat.setText(getString(R.string.lon_with_param, LonEntered));
-            tvSavedLon.setVisibility(View.VISIBLE);
-            tvSavedLat.setVisibility(View.VISIBLE);
-        }
     }
 
 
@@ -360,7 +361,9 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Toast.makeText(CreateAndEditMarkerActivity.this, "Marker Photo Uploaded", Toast.LENGTH_SHORT).show();
                 filePath = taskSnapshot.getDownloadUrl().toString();
+                imageView.setVisibility(View.VISIBLE);
                 Glide.with(CreateAndEditMarkerActivity.this).load(filePath).into(imageView);
+                btnRemove.setVisibility(View.VISIBLE);
             }
         });
     }

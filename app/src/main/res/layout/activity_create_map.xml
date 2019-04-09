@@ -98,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/recyclerViewMarkers"
             android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFF"
             android:background="@drawable/profilebuttonstyle"
             android:text="@string/add_marker" />
 
@@ -107,6 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/btn_add_marker"
             android:layout_alignParentEnd="true"
+            android:textColor="#FFFFFF"
             android:layout_marginTop="25dp"
             android:background="@drawable/profilebuttonstyle"
             android:text="@string/create_map" />

@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
     tools:context=".FindFriendsActivity">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Find Creators!"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/header_text"
+        android:textSize="20sp"/>
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/friendSearch_TIL"
+        android:layout_below="@+id/header_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -26,16 +35,20 @@
     </android.support.design.widget.TextInputLayout>
 
     <Button
+        android:layout_below="@id/friendSearch_TIL"
+        android:layout_alignParentEnd="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/searchFriendBtn"
         android:text="@string/search"
+        android:textColor="#FFFFFF"
         android:background="@drawable/profilebuttonstyle"/>
 
 
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/searchFriendBtn"
         android:id="@+id/recyclerViewFriends"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+</RelativeLayout>

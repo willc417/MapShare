@@ -108,7 +108,6 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
     }
 
     public void removeMarker(int index){
-        Toast.makeText(context, "Remove Marker", Toast.LENGTH_SHORT).show();
         myMarkerList.remove(index);
         myMarkerKeys.remove(index);
         notifyItemRemoved(index);
