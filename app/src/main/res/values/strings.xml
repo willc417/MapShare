@@ -26,8 +26,8 @@
     <string name="delete">Delete</string>
     <string name="enter_a_description">Enter a description!</string>
     <string name="name_this_marker">Name this marker!</string>
-    <string name="lat_with_param">Latitude: %1$f</string>
-    <string name="lon_with_param">Longitude: %1$f</string>
+    <string name="lat_with_param">Lat: %1$f</string>
+    <string name="lon_with_param">Lon: %1$f</string>
     <string name="get_current_location">Get Current Location</string>
     <string name="type_in_address">Type in Address</string>
     <string name="view_maps">View Maps</string>
@@ -41,5 +41,8 @@
     <string name="upload_image">Upload Image</string>
     <string name="show_saved_maps">Show Saved Maps</string>
     <string name="choose_a_marker_color">Choose a Marker Color</string>
+    <string name="customize_your_marker">Customize your Marker!</string>
+    <string name="upload">Upload</string>
+    <string name="remove">Remove</string>
 
 </resources>
