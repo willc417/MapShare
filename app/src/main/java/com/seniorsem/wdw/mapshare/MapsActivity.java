@@ -60,8 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     boolean viewingSubs = true;
 
-    @BindView(R.id.switchBtn)
-    CircleButton switchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,16 +140,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    @OnClick(R.id.switchBtn)
-    void switchMaps() {
-        viewingSubs = !viewingSubs;
-        mapFragment.getMapAsync(this);
-        if (viewingSubs) {
-            Toast.makeText(this, "Viewing Saved Maps", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Viewing Created Maps", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @OnClick(R.id.switchBtn2)
     void switchMaps2(){
@@ -160,7 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         if(viewingSubs){
             Toast.makeText(this,"Saved",Toast.LENGTH_LONG).show();
-            btn.setText("  Saved");
+            btn.setText("Saved");
         }else{
             Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();
             btn.setText("Created");
