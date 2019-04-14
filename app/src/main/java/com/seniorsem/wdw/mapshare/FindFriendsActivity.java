@@ -1,8 +1,10 @@
 package com.seniorsem.wdw.mapshare;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -46,7 +48,7 @@ public class FindFriendsActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        viewFriendsRecyclerAdapter = new ViewFriendsRecyclerAdapter(getApplicationContext());
+        viewFriendsRecyclerAdapter = new ViewFriendsRecyclerAdapter(this);
 
         RecyclerView recyclerViewPlaces = (RecyclerView) findViewById(
                 R.id.recyclerViewFriends);
@@ -119,6 +121,5 @@ public class FindFriendsActivity extends AppCompatActivity {
             });
         }
     }
-
 
 }

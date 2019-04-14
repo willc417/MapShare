@@ -179,82 +179,87 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
 
     @OnClick(R.id.btn_create_map)
     void createMapClick() {
-        List<MyMarker> myMarkers = viewMarkersRecyclerAdapter.getMyMarkerList();
 
-        final String titleEntered = etMapTitle.getText().toString();
-        String descEntered = etMapDesc.getText().toString();
+        if (etMapTitle.getText().toString().equals("")) {
+            Toast.makeText(this, "You must enter a title.", Toast.LENGTH_SHORT).show();
+        } else {
+            List<MyMarker> myMarkers = viewMarkersRecyclerAdapter.getMyMarkerList();
 
-        Date currentTime = Calendar.getInstance().getTime();
+            final String titleEntered = etMapTitle.getText().toString();
+            String descEntered = etMapDesc.getText().toString();
 
-        List<String> subscribers = new ArrayList<>();
-        if (editMap != null) {
-            subscribers = editMap.getSubscribers();
-        }
+            Date currentTime = Calendar.getInstance().getTime();
 
-        Float mapColor = colorToFloat.get(String.valueOf(MCspinnerAdapter.getItem(MCspinner_position)));
+            List<String> subscribers = new ArrayList<>();
+            if (editMap != null) {
+                subscribers = editMap.getSubscribers();
+            }
 
-        final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers, mapColor, MCspinner_position);
+            Float mapColor = colorToFloat.get(String.valueOf(MCspinnerAdapter.getItem(MCspinner_position)));
 
-        final String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + titleEntered.replace(" ", "_");
+            final Map newMap = new Map(FirebaseAuth.getInstance().getCurrentUser().getEmail(), myMarkers, currentTime.toString(), 0, spinner_position, titleEntered, descEntered, subscribers, mapColor, MCspinner_position);
 
-        if (isEdit == null) {
-            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User newUser = documentSnapshot.toObject(User.class);
+            final String mapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + titleEntered.replace(" ", "_");
 
-                    List<String> currMaps = newUser.getCreatedMaps();
+            if (isEdit == null) {
+                db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User newUser = documentSnapshot.toObject(User.class);
 
-                    currMaps.add(mapKey);
+                        List<String> currMaps = newUser.getCreatedMaps();
 
-                    newUser.setCreatedMaps(currMaps);
+                        currMaps.add(mapKey);
 
-                    db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
+                        newUser.setCreatedMaps(currMaps);
 
-                }
-            });
+                        db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
 
-            db.collection("createdMaps").document(mapKey).set(newMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    finish();
-                }
-            });
+                    }
+                });
+
+                db.collection("createdMaps").document(mapKey).set(newMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        finish();
+                    }
+                });
 
 
-        } else { //When doing an edited Map
+            } else { //When doing an edited Map
 
-            showProgressDialog();
-            final String oldMapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + editMap.getTitle().replace(" ", "_");
+                showProgressDialog();
+                final String oldMapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + editMap.getTitle().replace(" ", "_");
 
-            newMap.setSubscribers(editMap.getSubscribers());
+                newMap.setSubscribers(editMap.getSubscribers());
 
-            db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    User newUser = documentSnapshot.toObject(User.class);
+                db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User newUser = documentSnapshot.toObject(User.class);
 
-                    List<String> currMaps = newUser.getCreatedMaps();
+                        List<String> currMaps = newUser.getCreatedMaps();
 
-                    currMaps.remove(oldMapKey);
-                    currMaps.add(mapKey);
+                        currMaps.remove(oldMapKey);
+                        currMaps.add(mapKey);
 
-                    newUser.setCreatedMaps(currMaps);
+                        newUser.setCreatedMaps(currMaps);
 
-                    db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
+                        db.collection("users").document(newUser.getUID()).update("createdMaps", currMaps);
 
-                    editSubs(oldMapKey, newMap, mapKey);
-                    db.collection("createdMaps").document(oldMapKey).delete();
-                    db.collection("createdMaps").document(mapKey).set(newMap);
-                }
-            }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    hideProgressDialog();
-                    finish();
+                        editSubs(oldMapKey, newMap, mapKey);
+                        db.collection("createdMaps").document(oldMapKey).delete();
+                        db.collection("createdMaps").document(mapKey).set(newMap);
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        hideProgressDialog();
+                        finish();
 
-                }
-            });
+                    }
+                });
+            }
         }
     }
 

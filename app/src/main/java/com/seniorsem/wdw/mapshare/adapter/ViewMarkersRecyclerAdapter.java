@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.seniorsem.wdw.mapshare.R;
 import com.seniorsem.wdw.mapshare.data.MyMarker;
@@ -65,8 +64,6 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.tvTitle.setText(myMarkerList.get(holder.getAdapterPosition()).getTitle());
-        holder.tvDescription.setText(
-                myMarkerList.get(holder.getAdapterPosition()).getDescription());
         holder.tvLon.setText(String.valueOf(
                 myMarkerList.get(holder.getAdapterPosition()).getLat()));
         holder.tvLat.setText(String.valueOf(
@@ -89,21 +86,6 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
             }
         });
 
-      /*  if(!TextUtils.isEmpty(postList.get(holder.getAdapterPosition()).
-
-                getImageUrl()))
-
-        {
-            Glide.with(context).load(
-                    postList.get(holder.getAdapterPosition()).getImageUrl()
-            ).into(holder.ivImage);
-            holder.ivImage.setVisibility(View.VISIBLE);
-        } else
-
-        {
-            holder.ivImage.setVisibility(View.GONE);
-        }
-        */
         setAnimation(holder.itemView, position);
     }
 
@@ -144,7 +126,6 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvTitle;
-        public TextView tvDescription;
         public TextView tvLon;
         public TextView tvLat;
         public at.markushi.ui.CircleButton btnDelete;
@@ -153,7 +134,6 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         public ViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
             tvLon = itemView.findViewById(R.id.tvLon);
             tvLat = itemView.findViewById(R.id.tvLat);
             btnDelete = itemView.findViewById(R.id.btnDelete);
