@@ -1,7 +1,6 @@
 package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -49,8 +48,8 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
     public ViewMapsRecyclerAdapter(Context context, String creatorUID) {
         this.context = context;
         this.creatorUID = creatorUID;
-        this.mapList = new ArrayList<Map>();
-        this.mapKeys = new ArrayList<String>();
+        this.mapList = new ArrayList<>();
+        this.mapKeys = new ArrayList<>();
     }
 
     @NonNull
@@ -188,15 +187,6 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         notifyItemRemoved(index);
     }
 
-    private void removeMapByKey(String key) {
-        int index = mapKeys.indexOf(key);
-        if (index != -1) {
-            mapList.remove(index);
-            mapKeys.remove(index);
-            notifyItemChanged(index);
-        }
-    }
-
     public void removeAll() {
         int size = mapKeys.size();
         for (int i = 0; i < size; i++) {
@@ -272,21 +262,6 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
 
     private void deleteMap_3(String mapDocKey, String userKey) {
         db.collection("createdMaps").document(mapDocKey).delete();
-    }
-
-    public void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Deleting Map...");
-        }
-
-        progressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
     }
 
     @Override

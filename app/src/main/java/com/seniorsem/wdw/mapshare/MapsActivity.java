@@ -62,6 +62,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     boolean viewingSubs = true;
 
+    @BindView(R.id.switchBtn2)
+    Button switchbtn2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,15 +148,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @OnClick(R.id.switchBtn2)
     void switchMaps2(){
-        Button btn = (Button)findViewById(R.id.switchBtn2);
         viewingSubs = !viewingSubs;
         mapFragment.getMapAsync(this);
         if(viewingSubs){
             Toast.makeText(this,"Saved",Toast.LENGTH_LONG).show();
-            btn.setText("Saved");
+            switchbtn2.setText("Saved");
         }else{
             Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();
-            btn.setText("Created");
+            switchbtn2.setText("Created");
         }
     }
 
@@ -236,8 +238,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        final double longitude = -90.051; //location.getLongitude();
-        final double latitude = 35.139;//location.getLatitude();
+        final double longitude = location.getLongitude();
+        final double latitude = location.getLatitude();
 
 
         LatLng player = new LatLng(latitude, longitude);

@@ -40,9 +40,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
-    private StorageReference storageRef;
-
-
 
 
     @Override
@@ -50,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth = FirebaseAuth.getInstance();
-        storageRef = FirebaseStorage.getInstance().getReference();
         ButterKnife.bind(this);
 
 
@@ -101,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         showProgressDialog();
-        //Register.setProgress(50);
 
         firebaseAuth.createUserWithEmailAndPassword(etEmail.getText().toString(), etPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -143,8 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
 
-
-                            //storageRef.putFile(uri);
                             newUser.setProfilePicture(uri);
 
 
@@ -187,7 +180,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void showProgressDialog() {
         if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
+            progressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
             progressDialog.setMessage("Loading...");
         }
 

@@ -1,6 +1,5 @@
 package com.seniorsem.wdw.mapshare.adapter;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +7,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,15 +36,12 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
     private List<User> friendList;
     private List<String> friendKeys;
     private int lastPosition = -1;
-    private Activity activity;
-
-
 
     public ViewFriendsRecyclerAdapter(Context context) {
 
         this.context = context;
-        this.friendList = new ArrayList<User>();
-        this.friendKeys = new ArrayList<String>();
+        this.friendList = new ArrayList<>();
+        this.friendKeys = new ArrayList<>();
     }
 
 
@@ -69,7 +64,7 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
 
         Glide.with(context).load(friendList.get(holder.getAdapterPosition()).getProfilePicture()).into(holder.friendProfPic);
 
-        holder.friendName.setText(friendList.get(holder.getAdapterPosition()).getUID());
+        holder.friendName.setText(usernameFromEmail(friendList.get(holder.getAdapterPosition()).getUID()));
 
         holder.btnView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,15 +136,6 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
         notifyItemRemoved(index);
     }
 
-    private void removeMapByKey(String key) {
-        int index = friendKeys.indexOf(key);
-        if (index != -1) {
-            friendList.remove(index);
-            friendKeys.remove(index);
-            notifyItemChanged(index);
-        }
-    }
-
     public void removeAll() {
         int size = friendKeys.size();
         for (int i = 0; i < size; i++) {
@@ -157,22 +143,6 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
             friendKeys.remove(0);
         }
         notifyItemRangeRemoved(0, size);
-    }
-
-
-    public void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.setMessage("Deleting Map...");
-        }
-
-        progressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
     }
 
     public void addFriend(User friend, String key) {
@@ -199,6 +169,15 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
             friendProfPic = itemView.findViewById(R.id.friendProfPic);
             btnRemove = itemView.findViewById(R.id.btnRemove);
             btnView = itemView.findViewById(R.id.btnView);
+        }
+    }
+
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+
         }
     }
 
