@@ -2,11 +2,9 @@ package com.seniorsem.wdw.mapshare;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +31,6 @@ import butterknife.OnClick;
 public class ViewMapsActivity extends AppCompatActivity {
 
     private ViewMapsRecyclerAdapter viewMapsRecyclerAdapter;
-    private ProgressDialog progressDialog;
     static FirebaseFirestore db;
 
     Context context;
@@ -66,7 +63,7 @@ public class ViewMapsActivity extends AppCompatActivity {
 
         }
         else {
-            currUsername.setText(getString(R.string.currUsername, documentKey));
+            currUsername.setText(usernameFromEmail(getString(R.string.currUsername, documentKey)));
         }
 
         viewMapsRecyclerAdapter = new ViewMapsRecyclerAdapter(this,
@@ -81,8 +78,6 @@ public class ViewMapsActivity extends AppCompatActivity {
         recyclerViewPlaces.setLayoutManager(layoutManager);
         recyclerViewPlaces.setAdapter(viewMapsRecyclerAdapter);
         ButterKnife.bind(this);
-
-        //initPosts();
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final FloatingActionButton fabHide = (FloatingActionButton) findViewById(R.id.fabHide);
@@ -188,7 +183,6 @@ public class ViewMapsActivity extends AppCompatActivity {
 
     @OnClick(R.id.switchBtn)
     void switchMaps() {
-        showProgressDialog();
         if (viewingCreated) {
             viewingCreated = false;
             btnSwitch.setText("Show Created Maps");
@@ -198,8 +192,6 @@ public class ViewMapsActivity extends AppCompatActivity {
         }
         viewMapsRecyclerAdapter.removeAll();
         initPosts();
-        hideProgressDialog();
-
     }
 
     private void initPosts() {
@@ -228,18 +220,12 @@ public class ViewMapsActivity extends AppCompatActivity {
 
     }
 
-    public void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Switching...");
-        }
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
 
-        progressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
         }
     }
 

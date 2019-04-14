@@ -106,7 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currUser = documentSnapshot.toObject(User.class);
 
-                tvProfileUsername.setText(currUser.getUID());
+                tvProfileUsername.setText(usernameFromEmail(currUser.getUID()));
 
                 List<String> maps = currUser.getCreatedMaps();
                 tvNumCreated.setText(String.valueOf(maps.size()));
@@ -260,5 +260,14 @@ public class ProfileActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    private String usernameFromEmail(String email) {
+        if (email.contains("@")) {
+            return email.split("@")[0];
+        } else {
+            return email;
+
+        }
     }
 }

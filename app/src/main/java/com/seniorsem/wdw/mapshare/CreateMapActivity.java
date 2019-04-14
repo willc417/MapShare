@@ -102,8 +102,7 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
 
         db = FirebaseFirestore.getInstance();
 
-        viewMarkersRecyclerAdapter = new ViewMarkersRecyclerAdapter(this,
-                FirebaseAuth.getInstance().getCurrentUser().getUid());
+        viewMarkersRecyclerAdapter = new ViewMarkersRecyclerAdapter(this);
 
         RecyclerView recyclerViewPlaces = (RecyclerView) findViewById(
                 R.id.recyclerViewMarkers);
@@ -295,8 +294,7 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
         if (requestCode == 2) {
             if (resultCode == RESULT_OK) {
                 Log.d("TAG_UI", "onActivityResult");
-                //MyMarker myMarker = (MyMarker) data.getExtras().getSerializable("NewMarker");
-                //int index = data.getIntExtra("index", 0);
+
                 Bundle b = data.getBundleExtra("markerBundle");
                 MyMarker myMarker = (MyMarker) b.getSerializable("NewMarker");
                 int index = b.getInt("index");

@@ -36,7 +36,7 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
     }
 
 
-    public ViewMarkersRecyclerAdapter(Context context, String creatorUID) {
+    public ViewMarkersRecyclerAdapter(Context context) {
 
         try{
             mCallback = (CallbackInterface) context;
@@ -45,8 +45,8 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
             Log.e("MyAdapter","Must implement the CallbackInterface in the Activity", ex);
         }
         this.context = context;
-        this.myMarkerList = new ArrayList<MyMarker>();
-        this.myMarkerKeys = new ArrayList<String>();
+        this.myMarkerList = new ArrayList<>();
+        this.myMarkerKeys = new ArrayList<>();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         }
     }
 
-    public MyMarker getMyMarker(int position) {
+    private MyMarker getMyMarker(int position) {
         return myMarkerList.get(position);
     }
 
@@ -123,15 +123,15 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvTitle;
-        public TextView tvLon;
-        public TextView tvLat;
-        public at.markushi.ui.CircleButton btnDelete;
-        public at.markushi.ui.CircleButton btnEdit;
+        TextView tvTitle;
+        TextView tvLon;
+        TextView tvLat;
+        at.markushi.ui.CircleButton btnDelete;
+        at.markushi.ui.CircleButton btnEdit;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvLon = itemView.findViewById(R.id.tvLon);

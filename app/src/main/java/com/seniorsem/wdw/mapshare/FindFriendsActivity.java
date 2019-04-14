@@ -50,7 +50,7 @@ public class FindFriendsActivity extends AppCompatActivity {
 
         viewFriendsRecyclerAdapter = new ViewFriendsRecyclerAdapter(this);
 
-        RecyclerView recyclerViewPlaces = (RecyclerView) findViewById(
+        RecyclerView recyclerViewPlaces = findViewById(
                 R.id.recyclerViewFriends);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

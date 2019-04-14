@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FindFriendsActivity" />
+        <activity android:name=".FindFriendsActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait">
@@ -39,13 +40,20 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".ViewMapsActivity" />
-        <activity android:name=".CreateMapActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".CreateAndEditMarkerActivity" />
-        <activity android:name=".ViewNearbyMarkerActivity" />
-        <activity android:name=".SplashActivity">
+            android:label="@string/title_activity_maps"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewMapsActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateMapActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ProfileActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".CreateAndEditMarkerActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ViewNearbyMarkerActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
