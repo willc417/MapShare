@@ -4,8 +4,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +44,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
     private List<String> mapKeys;
     private String creatorUID;
     private int lastPosition = -1;
-    private Activity activity;
+
 
     public ViewMapsRecyclerAdapter(Context context, String creatorUID) {
         this.context = context;
@@ -95,7 +97,23 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeMap(holder.getAdapterPosition());
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setMessage("Are you sure you want to delete this map?");
+                    alertDialogBuilder.setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    removeMap(holder.getAdapterPosition());
+                                }
+                            });
+                    alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
                 }
             });
         } else {
@@ -161,7 +179,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
         }
     }
 
-    private void removeMap(int index) {
+    public void removeMap(int index) {
         String docKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + mapList.get(index).getTitle().replace(" ", "_");
         String userKey = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         deleteMap_1(docKey, userKey);

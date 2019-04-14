@@ -3,9 +3,12 @@ package com.seniorsem.wdw.mapshare.adapter;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +31,7 @@ import java.util.List;
 public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriendsRecyclerAdapter.ViewHolder> {
 
     private Context context;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private ProgressDialog progressDialog;
@@ -36,11 +40,16 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
     private int lastPosition = -1;
     private Activity activity;
 
+
+
     public ViewFriendsRecyclerAdapter(Context context) {
+
         this.context = context;
         this.friendList = new ArrayList<User>();
         this.friendKeys = new ArrayList<String>();
     }
+
+
 
     @NonNull
     @Override
@@ -62,7 +71,6 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
 
         holder.friendName.setText(friendList.get(holder.getAdapterPosition()).getUID());
 
-
         holder.btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,9 +84,25 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
         holder.btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                removeFriendFromDB(friendList.get(position).getUID());
-                removeFriend(position);
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                alertDialogBuilder.setMessage("Are you sure you want to unfollow?");
+                alertDialogBuilder.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                int position = holder.getAdapterPosition();
+                                removeFriendFromDB(friendList.get(position).getUID());
+                                removeFriend(position);
+                            }
+                        });
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 
@@ -111,7 +135,7 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
         }
     }
 
-    private void removeFriend(int index) {
+    public void removeFriend(int index) {
         friendList.remove(index);
         friendKeys.remove(index);
         notifyItemRemoved(index);

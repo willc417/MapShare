@@ -154,12 +154,26 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     @OnClick(R.id.removePhoto)
     void removeImage() {
 
-        filePath = null;
-        imageView.setVisibility(View.GONE);
-        btnRemove.setVisibility(View.GONE);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Are you sure you want to remove the Image?");
+        alertDialogBuilder.setPositiveButton("Remove",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        filePath = null;
+                        imageView.setVisibility(View.GONE);
+                        btnRemove.setVisibility(View.GONE);
+                    }
+                });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
 
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
-
 
 
     @OnClick(R.id.uploadPhoto)
