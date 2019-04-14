@@ -32,16 +32,17 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private ProgressDialog progressDialog;
     private List<User> friendList;
     private List<String> friendKeys;
     private int lastPosition = -1;
+    int isFollowers;
 
-    public ViewFriendsRecyclerAdapter(Context context) {
+    public ViewFriendsRecyclerAdapter(Context context, int isFollowers) {
 
         this.context = context;
         this.friendList = new ArrayList<>();
         this.friendKeys = new ArrayList<>();
+        this.isFollowers = isFollowers;
     }
 
 
@@ -76,31 +77,36 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
             }
         });
 
-        holder.btnRemove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-                alertDialogBuilder.setMessage("Are you sure you want to unfollow?");
-                alertDialogBuilder.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface arg0, int arg1) {
-                                int position = holder.getAdapterPosition();
-                                removeFriendFromDB(friendList.get(position).getUID());
-                                removeFriend(position);
-                            }
-                        });
-                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+        if (isFollowers == 1) {
+            holder.btnRemove.setVisibility(View.GONE);
+        }
+        else {
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
-            }
-        });
+            holder.btnRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
+                    alertDialogBuilder.setMessage("Are you sure you want to unfollow?");
+                    alertDialogBuilder.setPositiveButton("Yes",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    int position = holder.getAdapterPosition();
+                                    removeFriendFromDB(friendList.get(position).getUID());
+                                    removeFriend(position);
+                                }
+                            });
+                    alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
 
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                }
+            });
+        }
 
         setAnimation(holder.itemView, position);
     }
@@ -110,14 +116,29 @@ public class ViewFriendsRecyclerAdapter extends RecyclerView.Adapter<ViewFriends
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User u = documentSnapshot.toObject(User.class);
-                List<String> friends = u.getFriends();
+                List<String> friends = u.getFollowing();
 
                 friends.remove(uid);
 
-                db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("friends", friends);
+                db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("following", friends);
 
             }
         });
+
+        db.collection("users").document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User u = documentSnapshot.toObject(User.class);
+                List<String> friends = u.getFollowers();
+
+                friends.remove(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+                db.collection("users").document(uid).update("followers", friends);
+
+            }
+        });
+
+
     }
 
 

@@ -1,6 +1,5 @@
 package com.seniorsem.wdw.mapshare;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,7 +42,6 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
 
     Map editMap;
     String isEdit;
-    private ProgressDialog progressDialog;
 
     HashMap<String, Float> colorToFloat = new HashMap<>();
 
@@ -227,7 +225,6 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
 
             } else { //When doing an edited Map
 
-                showProgressDialog();
                 final String oldMapKey = FirebaseAuth.getInstance().getCurrentUser().getEmail() + "_" + editMap.getTitle().replace(" ", "_");
 
                 newMap.setSubscribers(editMap.getSubscribers());
@@ -253,7 +250,6 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
                 }).addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        hideProgressDialog();
                         finish();
 
                     }
@@ -304,21 +300,4 @@ public class CreateMapActivity extends AppCompatActivity implements ViewMarkersR
         }
 
     }
-
-    public void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Editing Map...");
-        }
-
-        progressDialog.show();
-    }
-
-    public void hideProgressDialog() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            progressDialog.dismiss();
-        }
-    }
-
-
 }

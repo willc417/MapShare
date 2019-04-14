@@ -115,13 +115,14 @@ public class LoginActivity extends AppCompatActivity {
 
                             List<String> createdMaps = new ArrayList<>();
                             List<String> subMaps = new ArrayList<>();
-                            List<String> friends = new ArrayList<>();
+                            List<String> followers = new ArrayList<>();
+                            List<String> following = new ArrayList<>();
 
                             //set profile picture url
                             String uri = "https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg";
 
                             User newUser = new User(
-                                    fbUser.getEmail(), createdMaps, subMaps, friends, uri);
+                                    fbUser.getEmail(), createdMaps, subMaps, followers, following, uri);
 
                             final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -133,7 +134,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                     db.collection("users").document(fbUser.getEmail()).collection("createdMaps").document();
                                     db.collection("users").document(fbUser.getEmail()).collection("subMaps").document();
-                                    db.collection("users").document(fbUser.getEmail()).collection("friends").document();
+                                    db.collection("users").document(fbUser.getEmail()).collection("followers").document();
+                                    db.collection("users").document(fbUser.getEmail()).collection("following").document();
                                     db.collection("users").document(fbUser.getEmail()).collection("profilePic").document();
                                 }
                             });

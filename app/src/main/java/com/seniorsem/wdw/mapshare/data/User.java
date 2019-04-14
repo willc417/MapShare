@@ -1,10 +1,5 @@
 package com.seniorsem.wdw.mapshare.data;
 
-import android.media.Image;
-import android.net.Uri;
-
-import java.net.URI;
-import java.net.URL;
 import java.util.List;
 
 public class User {
@@ -12,17 +7,19 @@ public class User {
     private String UID;
     private List<String> createdMaps;
     private List<String> subMaps;
-    private List<String> Friends;
+    private List<String> following;
+    private List<String> followers;
     private String profilePicture;
 
     public User() {}
 
-    public User(String UID, List<String> createdMaps, List<String> subMaps, List<String> friends, String profPic) {
+    public User(String UID, List<String> createdMaps, List<String> subMaps, List<String> following, List<String> followers, String profPic) {
 
         this.UID = UID;
         this.createdMaps = createdMaps;
         this.subMaps = subMaps;
-        this.Friends = friends;
+        this.following = following;
+        this.followers = followers;
         this.profilePicture = profPic;
     }
 
@@ -50,12 +47,20 @@ public class User {
         this.subMaps = subMaps;
     }
 
-    public List<String> getFriends() {
-        return Friends;
+    public List<String> getFollowing() {
+        return following;
     }
 
-    public void setFriends(List<String> friends) {
-        Friends = friends;
+    public void setFollowing(List<String> following) {
+        this.following = following;
+    }
+
+    public List<String> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<String> followers) {
+        this.followers = followers;
     }
 
     public String getProfilePicture(){ return profilePicture; }
