@@ -96,7 +96,7 @@ public class ViewMapsRecyclerAdapter extends RecyclerView.Adapter<ViewMapsRecycl
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
                     alertDialogBuilder.setMessage("Are you sure you want to delete this map?");
                     alertDialogBuilder.setPositiveButton("Yes",
                             new DialogInterface.OnClickListener() {

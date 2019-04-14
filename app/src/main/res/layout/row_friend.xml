@@ -36,7 +36,7 @@
 
         <at.markushi.ui.CircleButton
             android:id="@+id/btnView"
-            android:layout_toStartOf="@+id/btnRemove"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:src="@drawable/search"
             android:layout_width="35dp"
@@ -47,7 +47,7 @@
 
         <at.markushi.ui.CircleButton
             android:id="@+id/btnRemove"
-            android:layout_alignParentEnd="true"
+            android:layout_toStartOf="@+id/btnView"
             android:layout_centerVertical="true"
             android:src="@drawable/remove"
             android:tint="#FF0000"

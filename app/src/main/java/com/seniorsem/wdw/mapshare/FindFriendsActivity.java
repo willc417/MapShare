@@ -1,12 +1,10 @@
 package com.seniorsem.wdw.mapshare;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Button;
@@ -36,9 +34,9 @@ public class FindFriendsActivity extends AppCompatActivity {
     @BindView(R.id.searchFriendBtn)
     Button searchFriend;
 
-    ViewFriendsRecyclerAdapter viewFriendsRecyclerAdapter;
+    ViewFriendsRecyclerAdapter viewFollowingRecyclerAdapter;
+    ViewFriendsRecyclerAdapter viewFollowersRecyclerAdapter;
     FirebaseFirestore db;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +46,33 @@ public class FindFriendsActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
-        viewFriendsRecyclerAdapter = new ViewFriendsRecyclerAdapter(this);
+        viewFollowingRecyclerAdapter = new ViewFriendsRecyclerAdapter(this, 0);
+        viewFollowersRecyclerAdapter = new ViewFriendsRecyclerAdapter(this, 1);
 
-        RecyclerView recyclerViewPlaces = findViewById(
-                R.id.recyclerViewFriends);
+        RecyclerView recyclerViewFollowing = findViewById(R.id.recyclerViewFollowing);
+        RecyclerView recyclerViewFollowers = findViewById(R.id.recyclerViewFollowers);
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
-        recyclerViewPlaces.setLayoutManager(layoutManager);
-        recyclerViewPlaces.setAdapter(viewFriendsRecyclerAdapter);
+        recyclerViewFollowing.setLayoutManager(layoutManager);
+        recyclerViewFollowing.setAdapter(viewFollowingRecyclerAdapter);
+
+        LinearLayoutManager layoutManager2 = new LinearLayoutManager(this);
+        layoutManager2.setReverseLayout(true);
+        layoutManager2.setStackFromEnd(true);
+        recyclerViewFollowers.setLayoutManager(layoutManager2);
+        recyclerViewFollowers.setAdapter(viewFollowersRecyclerAdapter);
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        viewFriendsRecyclerAdapter.removeAll();
+        viewFollowingRecyclerAdapter.removeAll();
+        viewFollowersRecyclerAdapter.removeAll();
         initFriends();
     }
 
@@ -74,19 +82,34 @@ public class FindFriendsActivity extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currUser = documentSnapshot.toObject(User.class);
-                List<String> friends = currUser.getFriends();
+                List<String> following = currUser.getFollowing();
 
-                for (int i = 0; i < friends.size(); i++) {
-                    db.collection("users").document(friends.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                for (int i = 0; i < following.size(); i++) {
+                    db.collection("users").document(following.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             User friend = documentSnapshot.toObject(User.class);
-                            viewFriendsRecyclerAdapter.addFriend(friend, documentSnapshot.getId());
+                            viewFollowingRecyclerAdapter.addFriend(friend, documentSnapshot.getId());
                         }
                     });
                 }
+
+                List<String> followers = currUser.getFollowers();
+                for (int i = 0; i < followers.size(); i++) {
+                    db.collection("users").document(followers.get(i)).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            User friend = documentSnapshot.toObject(User.class);
+                            viewFollowersRecyclerAdapter.addFriend(friend, documentSnapshot.getId());
+                        }
+                    });
+                }
+
             }
         });
+
+
     }
 
     @OnClick(R.id.searchFriendBtn)

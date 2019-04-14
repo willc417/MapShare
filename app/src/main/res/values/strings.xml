@@ -47,4 +47,6 @@
     
 
     <string name="mapView_Save_Create">Saved</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
 </resources>

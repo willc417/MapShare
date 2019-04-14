@@ -87,8 +87,8 @@ public class ProfileActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     User currUser = documentSnapshot.toObject(User.class);
-                    List<String> friends = currUser.getFriends();
-                    if (friends.contains(documentKey)) {
+                    List<String> following = currUser.getFollowing();
+                    if (following.contains(documentKey)) {
                         addFriendBtn.setVisibility(View.GONE);
                         addFriendText.setVisibility(View.VISIBLE);
                     }
@@ -139,19 +139,30 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.addFriendBtn)
-    void addFriendToDB() {
-        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    void addFollowingToDB() {
+        db.collection("users").document(currentUser).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 User currUser = documentSnapshot.toObject(User.class);
-                List<String> friends = currUser.getFriends();
-                friends.add(documentKey);
-                db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getEmail()).update("friends", friends);
+                List<String> following = currUser.getFollowing();
+                following.add(documentKey);
+                db.collection("users").document(currentUser).update("following", following);
+            }
+        });
+
+        db.collection("users").document(documentKey).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User currUser = documentSnapshot.toObject(User.class);
+                List<String> followers = currUser.getFollowers();
+                followers.add(currentUser);
+                db.collection("users").document(documentKey).update("followers", followers);
             }
         });
 
         addFriendBtn.setVisibility(View.GONE);
         addFriendText.setVisibility(View.VISIBLE);
+
 
     }
 

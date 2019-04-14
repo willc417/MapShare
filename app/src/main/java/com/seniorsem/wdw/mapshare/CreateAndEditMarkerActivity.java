@@ -154,7 +154,7 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
     @OnClick(R.id.removePhoto)
     void removeImage() {
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
         alertDialogBuilder.setMessage("Are you sure you want to remove the Image?");
         alertDialogBuilder.setPositiveButton("Remove",
                 new DialogInterface.OnClickListener() {
