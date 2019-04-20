@@ -55,6 +55,10 @@ public class ProfileActivity extends AppCompatActivity {
     Button addFriendBtn;
     @BindView(R.id.addFriendText)
     TextView addFriendText;
+    @BindView(R.id.followerCount)
+    TextView followerCount;
+    @BindView(R.id.followingCount)
+    TextView followingCount;
 
     String documentKey;
 
@@ -114,6 +118,9 @@ public class ProfileActivity extends AppCompatActivity {
 
                 List<String> subMaps = currUser.getSubMaps();
                 tvNumberFollowed.setText(String.valueOf(subMaps.size()));
+
+                followerCount.setText(String.valueOf(currUser.getFollowers().size()));
+                followingCount.setText(String.valueOf(currUser.getFollowing().size()));
 
                 String profilePicString = currUser.getProfilePicture();
 

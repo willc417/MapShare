@@ -49,4 +49,6 @@
     <string name="mapView_Save_Create">Saved</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
+    <string name="marker_color">Marker Color</string>
+
 </resources>

@@ -77,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:text="@string/choose_a_marker_color"
+            android:text="@string/marker_color"
             android:textColor="@color/colorPrimary"
             android:id="@+id/spinner_text"
             android:layout_below="@id/recyclerViewMarkers"
