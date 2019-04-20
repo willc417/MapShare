@@ -2,7 +2,9 @@ package com.seniorsem.wdw.mapshare.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -82,7 +84,23 @@ public class ViewMarkersRecyclerAdapter extends RecyclerView.Adapter<ViewMarkers
         holder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeMarker(holder.getAdapterPosition());
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, R.style.AppCompatAlertDialogStyle);
+                alertDialogBuilder.setMessage("Are you sure you want to remove the Image?");
+                alertDialogBuilder.setPositiveButton("Remove",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                removeMarker(holder.getAdapterPosition());
+                            }
+                        });
+                alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 

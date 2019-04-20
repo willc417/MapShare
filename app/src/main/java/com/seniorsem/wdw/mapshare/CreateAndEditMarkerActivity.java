@@ -99,10 +99,6 @@ public class CreateAndEditMarkerActivity extends AppCompatActivity {
 
     public String filePath;
 
-    private final int PICK_IMAGE_REQUEST = 71;
-
-    private static final int RESULT_LOAD_IMAGE = 1;
-
     StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     int choice = 1;
