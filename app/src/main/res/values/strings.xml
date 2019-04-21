@@ -4,7 +4,6 @@
     <string name="mapshare">MapShare</string>
     <string name="username">Username</string>
     <string name="currUsername">Viewing: %1$s\'s Maps</string>
-
     <string name="password">Password</string>
     <string name="register">Register</string>
     <string name="log_in">Log In</string>
@@ -19,9 +18,7 @@
     <string name="create">Create</string>
     <string name="number_created">Maps Created</string>
     <string name="maps_followed">Maps Followed</string>
-
     <string name="change_profile_picture">Change Profile Picture</string>
-
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="enter_a_description">Enter a description!</string>
@@ -32,7 +29,7 @@
     <string name="type_in_address">Type in Address</string>
     <string name="view_maps">View Maps</string>
     <string name="find_friends">Find Friends</string>
-    <string name="enter_a_friend_s_username">Enter a friend\'s username</string>
+    <string name="enter_a_friend_s_username">Enter a friend\'s username (email included)</string>
     <string name="search">Search</string>
     <string name="followed">Followed</string>
     <string name="follow">Follow</string>
@@ -44,11 +41,12 @@
     <string name="customize_your_marker">Customize your Marker!</string>
     <string name="upload">Upload</string>
     <string name="remove">Remove</string>
-    
-
     <string name="mapView_Save_Create">Saved</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
     <string name="marker_color">Marker Color</string>
-
+    <string name="your_network">Your Network</string>
+    <string name="view_network">View Network</string>
+    <string name="map_stats">Map Stats</string>
+    <string name="network_stats">Network Stats</string>
 </resources>

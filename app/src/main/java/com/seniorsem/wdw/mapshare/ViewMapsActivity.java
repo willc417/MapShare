@@ -81,9 +81,10 @@ public class ViewMapsActivity extends AppCompatActivity {
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         final FloatingActionButton fabHide = (FloatingActionButton) findViewById(R.id.fabHide);
-        final FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fab_Home);
+        final FloatingActionButton fabHome = (FloatingActionButton) findViewById(R.id.fab_1);
         //Need better icon. fabHome
         final FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_2);
+        fab2.setImageDrawable(getDrawable(R.drawable.social_clip));
         //Need more appropriate icon. fab2
         final FloatingActionButton fab3 = (FloatingActionButton) findViewById(R.id.fab_3);
         //Need more appropriate icon. fab3
@@ -111,16 +112,14 @@ public class ViewMapsActivity extends AppCompatActivity {
         fabHome.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intentMain = new Intent();
-                intentMain.setClass(ViewMapsActivity.this, FindFriendsActivity.class);
-                Log.d("TAG_UI", "HERE");
+                intentMain.setClass(ViewMapsActivity.this, CreateMapActivity.class);
                 startActivity(intentMain);
             }
         });
         fab2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intentMain = new Intent();
-                intentMain.setClass(ViewMapsActivity.this, CreateMapActivity.class);
-                Log.d("TAG_UI", "HERE");
+                intentMain.setClass(ViewMapsActivity.this, FindFriendsActivity.class);
                 startActivity(intentMain);
             }
         });
@@ -128,7 +127,6 @@ public class ViewMapsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentMain = new Intent();
                 intentMain.setClass(ViewMapsActivity.this, ProfileActivity.class);
-                Log.d("TAG_UI", "HERE");
                 startActivity(intentMain);
             }
         });
