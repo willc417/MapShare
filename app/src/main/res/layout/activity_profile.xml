@@ -55,100 +55,152 @@
         android:textSize="20sp"
         android:visibility="gone" />
 
-    <TextView
-        android:layout_below="@+id/blueBox"
-        android:layout_width="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_height="wrap_content"
-        android:text="@string/number_created"
-        android:id="@+id/createdTxt"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/num_maps"
-        android:layout_marginStart="90dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/createdTxt"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardViewID"
+        android:layout_width="250dp"
+        android:layout_marginTop="5dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/blueBox"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="50dp"
-        android:text="@string/maps_followed"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/followedTxt"
-        android:textSize="20sp" />
+        android:layout_centerHorizontal="true">
 
-    <TextView
-        android:id="@+id/num_followed"
-        android:layout_width="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="90dp"
-        android:layout_below="@+id/followedTxt"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+        <RelativeLayout
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/cardViewID">
 
-    <TextView
-        android:layout_below="@+id/num_maps"
-        android:layout_width="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_height="wrap_content"
-        android:text="@string/followers"
-        android:id="@+id/followerCountText"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/map_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/map_stats"
+                android:textSize="20sp" />
 
-    <TextView
-        android:id="@+id/followerCount"
-        android:layout_marginStart="90dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/followerCountText"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/createdTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/map_stats"
+                android:layout_alignParentStart="true"
+                android:text="@string/number_created"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/num_followed"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="50dp"
-        android:text="@string/following"
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/followingCountText"
-        android:textSize="20sp" />
+            <TextView
+                android:id="@+id/num_maps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/createdTxt"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="40dp"
+                android:text="5"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
 
-    <TextView
-        android:id="@+id/followingCount"
-        android:layout_width="wrap_content"
-        android:layout_alignParentEnd="true"
+            <TextView
+                android:id="@+id/followedTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/map_stats"
+                android:layout_alignParentEnd="true"
+                android:text="@string/maps_followed"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/num_followed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/followedTxt"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="40dp"
+                android:text="6"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardViewMaps"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="90dp"
-        android:layout_below="@+id/followingCountText"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimary"
-        android:textSize="20sp" />
+        android:layout_below="@+id/cardViewID"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp">
+
+        <RelativeLayout
+            android:padding="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/network_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:text="@string/network_stats"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:layout_below="@+id/network_stats"
+                android:id="@+id/followerCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/followers"
+                android:layout_alignParentStart="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/followerCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/followerCountText"
+                android:layout_gravity="center_horizontal"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="30dp"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_below="@+id/network_stats"
+                android:id="@+id/followingCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/following"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/followingCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/followingCountText"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="30dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"
+                android:textSize="15sp" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
 
 
     <Button
         android:id="@+id/viewMapsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/findFriendsBtn"
         android:layout_centerHorizontal="true"
         android:background="@drawable/profilebuttonstyle"
-        android:layout_above="@+id/findFriendsBtn"
         android:text="@string/view_maps"
         android:textColor="#fff" />
 
@@ -156,12 +208,12 @@
         android:id="@+id/findFriendsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="50dp"
         android:background="@drawable/profilebuttonstyle"
-        android:text="@string/find_friends"
+        android:text="@string/view_network"
         android:textColor="#ffff"
         android:visibility="invisible" />
 
