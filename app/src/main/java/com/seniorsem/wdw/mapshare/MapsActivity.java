@@ -147,14 +147,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     @OnClick(R.id.switchBtn2)
-    void switchMaps2(){
+    void switchMaps2() {
         viewingSubs = !viewingSubs;
         mapFragment.getMapAsync(this);
-        if(viewingSubs){
-            Toast.makeText(this,"Saved",Toast.LENGTH_LONG).show();
+        if (viewingSubs) {
+            Toast.makeText(this, "Saved", Toast.LENGTH_LONG).show();
             switchbtn2.setText("Saved");
-        }else{
-            Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Created", Toast.LENGTH_SHORT).show();
             switchbtn2.setText("Created");
         }
     }
@@ -243,7 +243,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         LatLng player = new LatLng(latitude, longitude);
-        googleMap.addMarker(new MarkerOptions().position(player).title("Player Marker").icon(BitmapDescriptorFactory.defaultMarker(240)));
+        googleMap.addMarker(new MarkerOptions().position(player).title("Your Location").icon(BitmapDescriptorFactory.defaultMarker(240)));
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(player));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(player, zoomLevel));
@@ -282,18 +282,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
 
-                    Bundle extras = new Bundle();
-                    MyMarker thisMarker = (MyMarker) marker.getTag();
-                    extras.putSerializable("thisMarker", thisMarker);
+                if (!marker.getTitle().equals("Your Location")) {
+                    if (Math.abs(marker.getPosition().latitude - latitude) <= .01 && Math.abs(marker.getPosition().longitude - longitude) <= .01) {
 
-                    Intent ViewNearbyMarker = new Intent();
-                    ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
-                    ViewNearbyMarker.putExtras(extras);
-                    startActivity(ViewNearbyMarker);
-                } else {
-                    Toast.makeText(MapsActivity.this, "Move closer to unlock content", Toast.LENGTH_LONG).show();
+                        Bundle extras = new Bundle();
+                        MyMarker thisMarker = (MyMarker) marker.getTag();
+                        extras.putSerializable("thisMarker", thisMarker);
+
+                        Intent ViewNearbyMarker = new Intent();
+                        ViewNearbyMarker.setClass(MapsActivity.this, ViewNearbyMarkerActivity.class);
+                        ViewNearbyMarker.putExtras(extras);
+                        startActivity(ViewNearbyMarker);
+                    } else {
+                        Toast.makeText(MapsActivity.this, "Move closer to unlock content", Toast.LENGTH_LONG).show();
+                    }
                 }
                 return false;
             }
@@ -406,8 +409,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
-        }
-        catch(SecurityException e) {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
